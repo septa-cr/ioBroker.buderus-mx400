@@ -127,7 +127,7 @@ function flatten(value, prefix, out) {
 		return;
 	}
 	if (Array.isArray(value)) {
-		if (value.every((item) => item === null || typeof item !== 'object')) {
+		if (value.every(item => item === null || typeof item !== 'object')) {
 			// Liste einfacher Werte, z. B. ["ch","dhw"], als Text ablegen
 			out.push([prefix, JSON.stringify(value)]);
 			return;
@@ -206,9 +206,9 @@ class BuderusMx400 extends utils.Adapter {
 					rejectUnauthorized: false, // Das Gerät nutzt ein selbst signiertes Zertifikat
 					timeout: 10000,
 				},
-				(res) => {
+				res => {
 					let body = '';
-					res.on('data', (chunk) => (body += chunk));
+					res.on('data', chunk => (body += chunk));
 					res.on('end', () => {
 						if (res.statusCode === 404 || res.statusCode === 400) {
 							resolve(null);
@@ -247,8 +247,8 @@ class BuderusMx400 extends utils.Adapter {
 			// Die API meldet sie entweder als Liste von Objekten oder als einfaches Objekt.
 			const entries = Array.isArray(data.state) ? data.state : [data.state];
 			const specialValues = entries
-				.filter((entry) => entry && typeof entry === 'object')
-				.flatMap((entry) => Object.values(entry));
+				.filter(entry => entry && typeof entry === 'object')
+				.flatMap(entry => Object.values(entry));
 			const isSpecial = raw !== undefined && specialValues.includes(raw);
 			return { val: isSpecial ? null : raw, type: 'number', unit };
 		}
@@ -510,7 +510,7 @@ class BuderusMx400 extends utils.Adapter {
 			} catch (error) {
 				this.log.debug(`${apiPath}: ${error.message}`);
 			}
-			await new Promise((resolve) => this.setTimeout(() => resolve(undefined), 50));
+			await new Promise(resolve => this.setTimeout(() => resolve(undefined), 50));
 		}
 	}
 
@@ -542,11 +542,13 @@ class BuderusMx400 extends utils.Adapter {
 				failed.push(apiPath);
 				errors++;
 				if (errors >= 5) {
-					this.log.warn('Suche nach festen Pfaden abgebrochen, das Gerät antwortet nicht. Neuer Versuch folgt.');
+					this.log.warn(
+						'Suche nach festen Pfaden abgebrochen, das Gerät antwortet nicht. Neuer Versuch folgt.',
+					);
 					return;
 				}
 			}
-			await new Promise((resolve) => this.setTimeout(() => resolve(undefined), 20));
+			await new Promise(resolve => this.setTimeout(() => resolve(undefined), 20));
 		}
 		this.fixedPaths = fast;
 		this.slowPaths = slow;
@@ -582,7 +584,7 @@ class BuderusMx400 extends utils.Adapter {
 				this.log.debug(`${apiPath}: ${error.message}`);
 				stillFailing.push(apiPath);
 			}
-			await new Promise((resolve) => this.setTimeout(() => resolve(undefined), 50));
+			await new Promise(resolve => this.setTimeout(() => resolve(undefined), 50));
 		}
 		this.retryPaths = stillFailing;
 	}
@@ -696,7 +698,7 @@ if (require.main !== module) {
 	/**
 	 * @param {Partial<utils.AdapterOptions>} [options] - Adapter options
 	 */
-	module.exports = (options) => new BuderusMx400(options);
+	module.exports = options => new BuderusMx400(options);
 } else {
 	// otherwise start the instance directly
 	new BuderusMx400();
