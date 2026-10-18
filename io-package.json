@@ -1,0 +1,87 @@
+{
+	"common": {
+		"name": "buderus-mx400",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"uk": "Початкова версія",
+				"zh-cn": "首次出版"
+			}
+		},
+		"titleLang": {
+			"en": "Buderus MX400",
+			"de": "Buderus MX400",
+			"ru": "Будерус MX400",
+			"pt": "Buderus MX400",
+			"nl": "Buderus MX400",
+			"fr": "Budérus MX400",
+			"it": "Buderus MX400",
+			"es": "Buderus MX400",
+			"pl": "Buderusa MX400",
+			"uk": "Buderus MX400",
+			"zh-cn": "布德鲁斯 MX400"
+		},
+		"desc": {
+			"en": "Reads data from the Buderus MX400 heat pump indoor unit",
+			"de": "Liest Daten vom Buderus MX400 Wärmepumpen-Innengerät",
+			"ru": "Считывает данные с внутреннего блока теплового насоса Buderus MX400.",
+			"pt": "Lê dados da unidade interna da bomba de calor Buderus MX400",
+			"nl": "Leest gegevens van de Buderus MX400 warmtepompbinnenunit",
+			"fr": "Lit les données de l'unité intérieure de la pompe à chaleur Buderus MX400",
+			"it": "Legge i dati dall'unità interna della pompa di calore Buderus MX400",
+			"es": "Lee datos de la unidad interior de bomba de calor Buderus MX400",
+			"pl": "Odczytuje dane z jednostki wewnętrznej pompy ciepła Buderus MX400",
+			"uk": "Зчитує дані з внутрішнього блоку теплового насоса Buderus MX400",
+			"zh-cn": "从布德鲁斯 MX400 热泵室内机读取数据"
+		},
+		"authors": ["septa-cr <98657393+septa-cr@users.noreply.github.com>"],
+		"keywords": ["buderus", "mx400", "heat pump", "heating"],
+		"licenseInformation": {
+			"type": "free",
+			"license": "MIT"
+		},
+		"platform": "Javascript/Node.js",
+		"icon": "buderus-mx400.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/septa-cr/ioBroker.buderus-mx400/main/admin/buderus-mx400.png",
+		"readme": "https://github.com/septa-cr/ioBroker.buderus-mx400/blob/main/README.md",
+		"loglevel": "info",
+		"tier": 3,
+		"mode": "daemon",
+		"type": "climate-control",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "poll",
+		"adminUI": {
+			"config": "json"
+		},
+		"dependencies": [
+			{
+				"js-controller": ">=6.0.11"
+			}
+		],
+		"globalDependencies": [
+			{
+				"admin": ">=7.0.23"
+			}
+		]
+	},
+	  "protectedNative": ["token"],
+      "encryptedNative": ["token"],
+	  "native": {
+        "ip": "",
+        "token": "",
+        "interval": 60
+    },
+	"objects": [],
+	"instanceObjects": []
+}

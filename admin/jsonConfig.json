@@ -1,0 +1,133 @@
+{
+    "i18n": true,
+    "type": "panel",
+    "items": {
+        "_connectionHeader": {
+            "type": "header",
+            "text": {
+                "en": "Connection settings for the indoor unit",
+                "de": "Verbindungseinstellungen zur Inneneinheit"
+            },
+            "size": 4,
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
+        },
+        "ip": {
+            "type": "text",
+            "label": {
+                "en": "IP address of the indoor unit (MX400)",
+                "de": "IP-Adresse der Inneneinheit (MX400)"
+            },
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "token": {
+            "type": "password",
+            "label": {
+                "en": "API token",
+                "de": "API-Token"
+            },
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "interval": {
+            "type": "number",
+            "label": {
+                "en": "Polling interval (seconds)",
+                "de": "Abfrageintervall (Sekunden)"
+            },
+            "min": 10,
+            "max": 3600,
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "_tokenHelpText": {
+            "type": "staticText",
+            "text": {
+                "en": "The API token is created once with the 'Login' and 'Pass' values from the label of the indoor unit (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the unit at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:",
+                "de": "Der API-Token wird einmalig mit den Werten 'Login' und 'Pass' vom Typenschild der Inneneinheit erzeugt (Gateway-Firmware 15.00.01 oder neuer erforderlich). Dazu die Tasten WLAN und Wireless am Gerät eine Sekunde lang gleichzeitig drücken und den Token innerhalb von 5 Minuten anfordern. Der Token läuft nicht ab und sollte wie ein Passwort behandelt werden. Die Anleitung des Herstellers erklärt alle Schritte:"
+            },
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
+        },
+        "_tokenHelpLink": {
+            "type": "staticLink",
+            "label": {
+                "en": "Manufacturer's guide: create an API token",
+                "de": "Anleitung des Herstellers: API-Token erzeugen"
+            },
+            "href": "https://github.com/bosch-home-comfort/api-docs/blob/main/docs/k-40-rf.md",
+            "target": "_blank",
+            "button": true,
+            "variant": "outlined",
+            "icon": "book",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "_donateDivider": {
+            "type": "divider",
+            "newLine": true
+        },
+        "_donateText": {
+            "type": "staticText",
+            "text": {
+                "en": "Do you like this adapter? You can support its development with a coffee donation.",
+                "de": "Gefällt dir der Adapter? Mit einer Kaffeespende unterstützt du die Weiterentwicklung."
+            },
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
+        },
+        "_donateButton": {
+            "type": "staticLink",
+            "label": {
+                "en": "Donate a coffee via PayPal",
+                "de": "Kaffee spenden über PayPal"
+            },
+            "href": "https://www.paypal.com/donate/?hosted_button_id=BW2WL8QCH2AMU",
+            "target": "_blank",
+            "button": true,
+            "variant": "contained",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMyA5aDEzdjVhNSA1IDAgMCAxLTUgNUg4YTUgNSAwIDAgMS01LTV6IiBmaWxsPSIjM2IyYTFhIi8+PHBhdGggZD0iTTE2IDEwaDEuNWEyLjUgMi41IDAgMCAxIDAgNUgxNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjM2IyYTFhIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNNyAyYzAgMS41IDEuNSAxLjUgMS41IDNTNyA2LjUgNyA3LjVNMTEgMmMwIDEuNSAxLjUgMS41IDEuNSAzUzExIDYuNSAxMSA3LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNiMmExYSIgc3Ryb2tlLXdpZHRoPSIxLjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxyZWN0IHg9IjIiIHk9IjIwIiB3aWR0aD0iMTYiIGhlaWdodD0iMiIgcng9IjEiIGZpbGw9IiMzYjJhMWEiLz48L3N2Zz4K",
+            "controlStyle": {
+                "backgroundColor": "#ffc439",
+                "color": "#111111",
+                "fontWeight": "bold",
+                "textTransform": "none"
+            },
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        }
+    }
+}
