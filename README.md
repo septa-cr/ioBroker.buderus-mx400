@@ -1,120 +1,127 @@
 ![Logo](admin/buderus-mx400.png)
+
 # ioBroker.buderus-mx400
 
-[![NPM version](https://img.shields.io/npm/v/iobroker.buderus-mx400.svg)](https://www.npmjs.com/package/iobroker.buderus-mx400)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.buderus-mx400.svg)](https://www.npmjs.com/package/iobroker.buderus-mx400)
-![Number of Installations](https://iobroker.live/badges/buderus-mx400-installed.svg)
-![Current version in stable repository](https://iobroker.live/badges/buderus-mx400-stable.svg)
+![Test and Release](https://github.com/septa-cr/ioBroker.buderus-mx400/workflows/Test%20and%20Release/badge.svg)
+[![License](https://img.shields.io/github/license/septa-cr/ioBroker.buderus-mx400)](LICENSE)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-ffc439.svg)](https://www.paypal.com/donate/?hosted_button_id=BW2WL8QCH2AMU)
 
-[![NPM](https://nodei.co/npm/iobroker.buderus-mx400.png?downloads=true)](https://nodei.co/npm/iobroker.buderus-mx400/)
+**[🇩🇪 Deutsche Anleitung](docs/de/README.md)**
 
-**Tests:** ![Test and Release](https://github.com/septa-cr/ioBroker.buderus-mx400/workflows/Test%20and%20Release/badge.svg)
+## Buderus MX400 adapter for ioBroker
 
-## buderus-mx400 adapter for ioBroker
+This adapter reads the data of a **Buderus MX400** heat pump indoor unit via the official **local API** of the manufacturer. The connection runs directly in your home network. No cloud account is needed.
 
-Reads data from the Buderus MX400 heat pump indoor unit
+According to the manufacturer, the same API is also offered by the Bosch Connect-Key K 40 RF and the K 40 RF of IVT, Vulcano and Worcester. The adapter was developed and tested with a Buderus MX400.
 
-## Developer manual
-This section is intended for the developer. It can be deleted later.
+> **Note:** The manufacturer's API is currently **read-only**. The adapter can display all values, but it cannot change settings of the heat pump.
 
-### DISCLAIMER
+## Features
 
-Please make sure that you consider copyrights and trademarks when you use names or logos of a company and add a disclaimer to your README.
-You can check other adapters for examples or ask in the developer community. Using a name or logo of a company without permission may cause legal problems for you.
+- **Reads all available values automatically.** At startup, the adapter checks every resource described in the manufacturer's API specification and creates data points only for those your system actually provides. In addition, all signals reported by the device itself are read.
+- **German and English names** for all data points, with the correct units (°C, kWh, %, l/h …)
+- **Energy counters** (e.g. total consumption, heating, hot water) as separate data points for heat produced, compressor and electric heater
+- **History data** for consumption, starts, working time and temperatures: daily values of the last 31 days, monthly values of the last 12 months, plus *today* and *this month*. Temperatures are shown as averages, energy values as totals.
+- **Complex responses** such as error messages or system information are split into individual data points, and the complete response is also available as JSON.
+- **Sensor special values** (short circuit, open circuit, flow too low …) are not shown as measured values, the data point stays empty instead.
+- **Connection indicator** (`info.connection`) in the instance list
+- **Gentle on the device:** values that rarely change (history data, Wi-Fi list) are only read once per hour. Resources that did not answer during startup are retried hourly.
 
-### Getting started
+## Requirements
 
-You are almost done, only a few steps left:
-1. Create a new repository on GitHub with the name `ioBroker.buderus-mx400`
-1. Initialize the current folder as a new git repository:  
-	```bash
-	git init -b main
-	git add .
-	git commit -m "Initial commit"
-	```
-1. Link your local repository with the one on GitHub:  
-	```bash
-	git remote add origin https://github.com/septa-cr/ioBroker.buderus-mx400
-	```
+- Buderus MX400 (or another supported K 40 RF gateway) with **gateway firmware 15.00.01 or newer**
+- The indoor unit and ioBroker must be in the same local network.
+- An **API token** for the device (see below)
+- ioBroker with js-controller 6.0.11 or newer and Admin 7.0.23 or newer, Node.js 22 or newer recommended
 
-1. Push all files to the GitHub repo:  
-	```bash
-	git push origin main
-	```
-1. Add a new secret under https://github.com/septa-cr/ioBroker.buderus-mx400/settings/secrets. It must be named `AUTO_MERGE_TOKEN` and contain a personal access token with push access to the repository, e.g. yours. You can create a new token under https://github.com/settings/tokens.
+## Creating the API token
 
-1. Head over to [main.js](main.js) and start programming!
+The token is created **once** with the `Login` and `Pass` values printed on the label of the indoor unit. The token does not expire, so store it safely and treat it like a password.
 
-### Best Practices
-We've collected some [best practices](https://github.com/ioBroker/ioBroker.repositories#development-and-coding-best-practices) regarding ioBroker development and coding in general. If you're new to ioBroker or Node.js, you should
-check them out. If you're already experienced, you should also take a look at them - you might learn something new :)
+Short summary of the manufacturer's guide:
 
-### State Roles
-When creating state objects, it is important to use the correct role for the state. The role defines how the state should be interpreted by visualizations and other adapters. For a list of available roles and their meanings, please refer to the [state roles documentation](https://www.iobroker.net/#en/documentation/dev/stateroles.md).
+1. Find the IP address of the indoor unit in your router.
+2. Remove all hyphens from the `Pass` value.
+3. Press the **WLAN** and **Wireless** buttons on the unit at the same time for one second. The LEDs briefly flash blue.
+4. **Within 5 minutes**, request the token (port 9442):
 
-**Important:** Do not invent your own custom role names. If you need a role that is not part of the official list, please contact the ioBroker developer community for guidance and discussion about adding new roles.
+    ```bash
+    curl --insecure --request POST "https://IP-ADDRESS:9442/auth/token" \
+      --header "Content-Type: application/x-www-form-urlencoded" \
+      --data-urlencode "grant_type=password" \
+      --data-urlencode "username=LOGIN" \
+      --data-urlencode "password=PASS-WITHOUT-HYPHENS" \
+      --data-urlencode "client_name=iobroker"
+    ```
 
-### Scripts in `package.json`
-Several npm scripts are predefined for your convenience. You can run them using `npm run <scriptname>`
-| Script name | Description |
-|-------------|-------------|
-| `test:js` | Executes the tests you defined in `*.test.js` files. |
-| `test:package` | Ensures your `package.json` and `io-package.json` are valid. |
-| `test:integration` | Tests the adapter startup with an actual instance of ioBroker. |
-| `test` | Performs a minimal test run on package files and your tests. |
-| `check` | Performs a type-check on your code (without compiling anything). |
-| `lint` | Runs `ESLint` to check your code for formatting errors and potential bugs. |
-| `translate` | Translates texts in your adapter to all required languages, see [`@iobroker/adapter-dev`](https://github.com/ioBroker/adapter-dev#manage-translations) for more details. |
-| `release` | Creates a new release, see [`@alcalzone/release-script`](https://github.com/AlCalzone/release-script#usage) for more details. |
+    On Windows (PowerShell), write `curl.exe` instead of `curl` and put the command on a single line without the `\`.
 
-### Writing tests
-When done right, testing code is invaluable, because it gives you the 
-confidence to change your code while knowing exactly if and when 
-something breaks. A good read on the topic of test-driven development 
-is https://hackernoon.com/introduction-to-test-driven-development-tdd-61a13bc92d92. 
-Although writing tests before the code might seem strange at first, but it has very 
-clear upsides.
+5. Copy the value of `access_token` from the response.
 
-The template provides you with basic tests for the adapter startup and package files.
-It is recommended that you add your own tests into the mix.
+The complete guide with troubleshooting: [K 40 RF API documentation (Bosch Home Comfort)](https://github.com/bosch-home-comfort/api-docs/blob/main/docs/k-40-rf.md)
 
-### Publishing the adapter
-Using GitHub Actions, you can enable automatic releases on npm whenever you push a new git tag that matches the form 
-`v<major>.<minor>.<patch>`. We **strongly recommend** that you do. The necessary steps are described in `.github/workflows/test-and-release.yml`.
+## Installation
 
-Since you installed the release script, you can create a new
-release simply by calling:
-```bash
-npm run release
-```
-Additional command line options for the release script are explained in the
-[release-script documentation](https://github.com/AlCalzone/release-script#command-line).
+As long as the adapter is not available in the official ioBroker repository, install it directly from GitHub:
 
-To get your adapter released in ioBroker, please refer to the documentation 
-of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository).
+1. In the ioBroker Admin, open **Adapters**.
+2. Click the **GitHub icon** ("Install from custom URL") in the toolbar.
+3. On the **Custom** tab, enter `https://github.com/septa-cr/ioBroker.buderus-mx400` and confirm.
+4. Create an instance of the adapter.
 
-### Test the adapter manually with dev-server
-Since you set up `dev-server`, you can use it to run, test and debug your adapter.
+## Configuration
 
-You may start `dev-server` by calling from your dev directory:
-```bash
-dev-server watch
-```
+| Setting | Description |
+| --- | --- |
+| IP address of the indoor unit | IP address of the MX400 in your network, e.g. `192.168.178.135` |
+| API token | The token created as described above. It is stored encrypted. |
+| Polling interval (seconds) | How often the values are read. Default 60, minimum 10 |
 
-The ioBroker.admin interface will then be available at http://localhost:undefined/
+At the first start, the adapter checks all resources of the API. This takes about one to two minutes. The log then shows how many resources your system provides, for example: *"Search completed: 1286 paths checked, 118 present …"*.
 
-Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev-server#command-line) for more details.
+## Data points
+
+| Folder | Content |
+| --- | --- |
+| `info.connection` | Connection to the indoor unit (true/false) |
+| `signals.*` | All signals reported by the device, e.g. outdoor temperature, flow temperature, compressor speed |
+| `heatSources.*` | Heat pump: temperatures, compressor power, system pressure, energy counters |
+| `heatingCircuits.hc1.*` | Heating circuit 1: room temperature, setpoints, pump and status |
+| `dhwCircuits.dhw1.*` | Hot water: temperature, setpoint, status |
+| `devices.device1.*` | Paired radio devices, e.g. room controllers |
+| `recordings.*` | History data (`daily`, `monthly`, `today`, `thisMonth`) |
+| `system.*`, `gateway.*`, `notifications.*` | System information, gateway, error messages |
+
+Which folders and values appear depends on your system.
+
+## Security notes
+
+- The indoor unit uses a self-signed certificate. As recommended by the manufacturer, the adapter therefore does not verify the certificate for this connection only. The data is still transmitted encrypted. Use the adapter only in a trusted local network.
+- The token is stored encrypted in ioBroker and is only made available to the adapter itself.
+
+## Support the development
+
+Do you like this adapter? You can support its development with a coffee donation:
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate%20a%20coffee-PayPal-ffc439.svg?style=for-the-badge)](https://www.paypal.com/donate/?hosted_button_id=BW2WL8QCH2AMU)
+
+## Disclaimer
+
+This adapter is a private project and is not affiliated with Bosch Thermotechnik GmbH or Buderus. All product and company names are trademarks of their respective owners. Use at your own risk.
 
 ## Changelog
+
 <!--
-	Placeholder for the next version (at the beginning of the line):
-	### **WORK IN PROGRESS**
+    Placeholder for the next version (at the beginning of the line):
+    ### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
-* (septa-cr) initial release
+### 0.0.1 (2026-10-18)
+
+- (septa-cr) Initial release: reads all values of the indoor unit via the local API (signals, energy counters, history data), German and English data point names, connection indicator
 
 ## License
+
 MIT License
 
 Copyright (c) 2026 septa-cr <98657393+septa-cr@users.noreply.github.com>

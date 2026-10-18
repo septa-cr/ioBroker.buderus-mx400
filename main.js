@@ -640,13 +640,13 @@ class BuderusMx400 extends utils.Adapter {
 	async onReady() {
 		await this.extendObjectAsync('info', {
 			type: 'channel',
-			common: { name: 'Information' },
+			common: { name: { en: 'Information', de: 'Informationen' } },
 			native: {},
 		});
 		await this.extendObjectAsync('info.connection', {
 			type: 'state',
 			common: {
-				name: 'Connection to the MX400',
+				name: { en: 'Connection to the MX400', de: 'Verbindung zur MX400' },
 				type: 'boolean',
 				role: 'indicator.connected',
 				read: true,

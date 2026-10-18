@@ -1,87 +1,115 @@
 {
-	"common": {
-		"name": "buderus-mx400",
-		"version": "0.0.1",
-		"news": {
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"uk": "Початкова версія",
-				"zh-cn": "首次出版"
-			}
-		},
-		"titleLang": {
-			"en": "Buderus MX400",
-			"de": "Buderus MX400",
-			"ru": "Будерус MX400",
-			"pt": "Buderus MX400",
-			"nl": "Buderus MX400",
-			"fr": "Budérus MX400",
-			"it": "Buderus MX400",
-			"es": "Buderus MX400",
-			"pl": "Buderusa MX400",
-			"uk": "Buderus MX400",
-			"zh-cn": "布德鲁斯 MX400"
-		},
-		"desc": {
-			"en": "Reads data from the Buderus MX400 heat pump indoor unit",
-			"de": "Liest Daten vom Buderus MX400 Wärmepumpen-Innengerät",
-			"ru": "Считывает данные с внутреннего блока теплового насоса Buderus MX400.",
-			"pt": "Lê dados da unidade interna da bomba de calor Buderus MX400",
-			"nl": "Leest gegevens van de Buderus MX400 warmtepompbinnenunit",
-			"fr": "Lit les données de l'unité intérieure de la pompe à chaleur Buderus MX400",
-			"it": "Legge i dati dall'unità interna della pompa di calore Buderus MX400",
-			"es": "Lee datos de la unidad interior de bomba de calor Buderus MX400",
-			"pl": "Odczytuje dane z jednostki wewnętrznej pompy ciepła Buderus MX400",
-			"uk": "Зчитує дані з внутрішнього блоку теплового насоса Buderus MX400",
-			"zh-cn": "从布德鲁斯 MX400 热泵室内机读取数据"
-		},
-		"authors": ["septa-cr <98657393+septa-cr@users.noreply.github.com>"],
-		"keywords": ["buderus", "mx400", "heat pump", "heating"],
-		"licenseInformation": {
-			"type": "free",
-			"license": "MIT"
-		},
-		"platform": "Javascript/Node.js",
-		"icon": "buderus-mx400.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/septa-cr/ioBroker.buderus-mx400/main/admin/buderus-mx400.png",
-		"readme": "https://github.com/septa-cr/ioBroker.buderus-mx400/blob/main/README.md",
-		"loglevel": "info",
-		"tier": 3,
-		"mode": "daemon",
-		"type": "climate-control",
-		"compact": true,
-		"connectionType": "local",
-		"dataSource": "poll",
-		"adminUI": {
-			"config": "json"
-		},
-		"dependencies": [
-			{
-				"js-controller": ">=6.0.11"
-			}
-		],
-		"globalDependencies": [
-			{
-				"admin": ">=7.0.23"
-			}
-		]
-	},
-	  "protectedNative": ["token"],
-      "encryptedNative": ["token"],
-	  "native": {
+    "common": {
+        "name": "buderus-mx400",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "Initial release: reads all values of the indoor unit via the local API (signals, energy counters, history data), German and English data point names, connection indicator",
+                "de": "Erstveröffentlichung: liest alle Werte der Inneneinheit über die lokale API (Signale, Energiezähler, Verlaufsdaten), deutsche und englische Datenpunktnamen, Verbindungsanzeige",
+                "ru": "Первый выпуск: считывает все значения внутреннего блока через локальный API (сигналы, счётчики энергии, история), названия точек данных на немецком и английском, индикатор подключения",
+                "pt": "Versão inicial: lê todos os valores da unidade interior através da API local (sinais, contadores de energia, histórico), nomes dos pontos de dados em alemão e inglês, indicador de ligação",
+                "nl": "Eerste uitgave: leest alle waarden van de binnenunit via de lokale API (signalen, energiemeters, historische gegevens), Duitse en Engelse namen van datapunten, verbindingsindicator",
+                "fr": "Première version : lit toutes les valeurs de l'unité intérieure via l'API locale (signaux, compteurs d'énergie, historique), noms des points de données en allemand et en anglais, indicateur de connexion",
+                "it": "Prima versione: legge tutti i valori dell'unità interna tramite l'API locale (segnali, contatori di energia, dati storici), nomi dei punti dati in tedesco e inglese, indicatore di connessione",
+                "es": "Primera versión: lee todos los valores de la unidad interior mediante la API local (señales, contadores de energía, datos históricos), nombres de puntos de datos en alemán e inglés, indicador de conexión",
+                "pl": "Pierwsze wydanie: odczytuje wszystkie wartości jednostki wewnętrznej przez lokalne API (sygnały, liczniki energii, dane historyczne), nazwy punktów danych po niemiecku i angielsku, wskaźnik połączenia",
+                "uk": "Перший випуск: зчитує всі значення внутрішнього блоку через локальний API (сигнали, лічильники енергії, історія), назви точок даних німецькою та англійською, індикатор підключення",
+                "zh-cn": "首次发布：通过本地 API 读取室内机的全部数值（信号、能量计数器、历史数据），数据点名称支持德语和英语，带连接状态指示"
+            }
+        },
+        "titleLang": {
+            "en": "Buderus MX400",
+            "de": "Buderus MX400",
+            "ru": "Buderus MX400",
+            "pt": "Buderus MX400",
+            "nl": "Buderus MX400",
+            "fr": "Buderus MX400",
+            "it": "Buderus MX400",
+            "es": "Buderus MX400",
+            "pl": "Buderus MX400",
+            "uk": "Buderus MX400",
+            "zh-cn": "Buderus MX400"
+        },
+        "desc": {
+            "en": "Reads all data of the Buderus MX400 heat pump indoor unit via the local API",
+            "de": "Liest alle Daten der Buderus MX400 Wärmepumpen-Inneneinheit über die lokale API",
+            "ru": "Считывает все данные внутреннего блока теплового насоса Buderus MX400 через локальный API",
+            "pt": "Lê todos os dados da unidade interior da bomba de calor Buderus MX400 através da API local",
+            "nl": "Leest alle gegevens van de Buderus MX400 warmtepomp-binnenunit via de lokale API",
+            "fr": "Lit toutes les données de l'unité intérieure de la pompe à chaleur Buderus MX400 via l'API locale",
+            "it": "Legge tutti i dati dell'unità interna della pompa di calore Buderus MX400 tramite l'API locale",
+            "es": "Lee todos los datos de la unidad interior de la bomba de calor Buderus MX400 mediante la API local",
+            "pl": "Odczytuje wszystkie dane jednostki wewnętrznej pompy ciepła Buderus MX400 przez lokalne API",
+            "uk": "Зчитує всі дані внутрішнього блоку теплового насоса Buderus MX400 через локальний API",
+            "zh-cn": "通过本地 API 读取 Buderus MX400 热泵室内机的全部数据"
+        },
+        "authors": ["septa-cr <98657393+septa-cr@users.noreply.github.com>"],
+        "keywords": ["buderus", "mx400", "k40rf", "bosch", "heat pump", "heating", "waermepumpe"],
+        "licenseInformation": {
+            "type": "free",
+            "license": "MIT"
+        },
+        "platform": "Javascript/Node.js",
+        "icon": "buderus-mx400.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/septa-cr/ioBroker.buderus-mx400/main/admin/buderus-mx400.png",
+        "readme": "https://github.com/septa-cr/ioBroker.buderus-mx400/blob/main/README.md",
+        "loglevel": "info",
+        "tier": 3,
+        "mode": "daemon",
+        "type": "climate-control",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "adminUI": {
+            "config": "json"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=6.0.11"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=7.0.23"
+            }
+        ]
+    },
+    "protectedNative": ["token"],
+    "encryptedNative": ["token"],
+    "native": {
         "ip": "",
         "token": "",
         "interval": 60
     },
-	"objects": [],
-	"instanceObjects": []
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Information",
+                    "de": "Informationen"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": {
+                    "en": "Connection to the MX400",
+                    "de": "Verbindung zur MX400"
+                },
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }
