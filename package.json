@@ -10,6 +10,7 @@
   "homepage": "https://github.com/septa-cr/ioBroker.buderus-mx400",
   "license": "MIT",
   "keywords": [
+    "ioBroker",
     "buderus",
     "mx400",
     "heat pump",

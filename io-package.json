@@ -4,17 +4,17 @@
         "version": "0.0.1",
         "news": {
             "0.0.1": {
-                "en": "Initial release: reads all values of the indoor unit via the local API (signals, energy counters, history data), German and English data point names, connection indicator",
-                "de": "Erstveröffentlichung: liest alle Werte der Inneneinheit über die lokale API (Signale, Energiezähler, Verlaufsdaten), deutsche und englische Datenpunktnamen, Verbindungsanzeige",
-                "ru": "Первый выпуск: считывает все значения внутреннего блока через локальный API (сигналы, счётчики энергии, история), названия точек данных на немецком и английском, индикатор подключения",
-                "pt": "Versão inicial: lê todos os valores da unidade interior através da API local (sinais, contadores de energia, histórico), nomes dos pontos de dados em alemão e inglês, indicador de ligação",
-                "nl": "Eerste uitgave: leest alle waarden van de binnenunit via de lokale API (signalen, energiemeters, historische gegevens), Duitse en Engelse namen van datapunten, verbindingsindicator",
-                "fr": "Première version : lit toutes les valeurs de l'unité intérieure via l'API locale (signaux, compteurs d'énergie, historique), noms des points de données en allemand et en anglais, indicateur de connexion",
-                "it": "Prima versione: legge tutti i valori dell'unità interna tramite l'API locale (segnali, contatori di energia, dati storici), nomi dei punti dati in tedesco e inglese, indicatore di connessione",
-                "es": "Primera versión: lee todos los valores de la unidad interior mediante la API local (señales, contadores de energía, datos históricos), nombres de puntos de datos en alemán e inglés, indicador de conexión",
-                "pl": "Pierwsze wydanie: odczytuje wszystkie wartości jednostki wewnętrznej przez lokalne API (sygnały, liczniki energii, dane historyczne), nazwy punktów danych po niemiecku i angielsku, wskaźnik połączenia",
-                "uk": "Перший випуск: зчитує всі значення внутрішнього блоку через локальний API (сигнали, лічильники енергії, історія), назви точок даних німецькою та англійською, індикатор підключення",
-                "zh-cn": "首次发布：通过本地 API 读取室内机的全部数值（信号、能量计数器、历史数据），数据点名称支持德语和英语，带连接状态指示"
+                "en": "Initial release: reads all values of the Buderus MX400 LAN and radio module via the local API (signals, energy counters, history data), German and English data point names, connection indicator",
+                "de": "Erstveröffentlichung: liest alle Werte des Buderus LAN- und Funkmoduls MX400 über die lokale API (Signale, Energiezähler, Verlaufsdaten), deutsche und englische Datenpunktnamen, Verbindungsanzeige",
+                "ru": "Первый выпуск: считывает все значения LAN- и радиомодуля Buderus MX400 через локальный API (сигналы, счётчики энергии, история), названия точек данных на немецком и английском, индикатор подключения",
+                "pt": "Versão inicial: lê todos os valores do módulo LAN e rádio Buderus MX400 através da API local (sinais, contadores de energia, histórico), nomes dos pontos de dados em alemão e inglês, indicador de ligação",
+                "nl": "Eerste uitgave: leest alle waarden van de Buderus MX400 LAN- en radiomodule via de lokale API (signalen, energiemeters, historische gegevens), Duitse en Engelse namen van datapunten, verbindingsindicator",
+                "fr": "Première version : lit toutes les valeurs du module LAN et radio Buderus MX400 via l'API locale (signaux, compteurs d'énergie, historique), noms des points de données en allemand et en anglais, indicateur de connexion",
+                "it": "Prima versione: legge tutti i valori del modulo LAN e radio Buderus MX400 tramite l'API locale (segnali, contatori di energia, dati storici), nomi dei punti dati in tedesco e inglese, indicatore di connessione",
+                "es": "Primera versión: lee todos los valores del módulo LAN y radio Buderus MX400 mediante la API local (señales, contadores de energía, datos históricos), nombres de puntos de datos en alemán e inglés, indicador de conexión",
+                "pl": "Pierwsze wydanie: odczytuje wszystkie wartości modułu LAN i radiowego Buderus MX400 przez lokalne API (sygnały, liczniki energii, dane historyczne), nazwy punktów danych po niemiecku i angielsku, wskaźnik połączenia",
+                "uk": "Перший випуск: зчитує всі значення LAN- та радіомодуля Buderus MX400 через локальний API (сигнали, лічильники енергії, історія), назви точок даних німецькою та англійською, індикатор підключення",
+                "zh-cn": "首次发布：通过本地 API 读取 Buderus MX400 局域网与无线模块的全部数值（信号、能量计数器、历史数据），数据点名称支持德语和英语，带连接状态指示"
             }
         },
         "titleLang": {
@@ -31,20 +31,30 @@
             "zh-cn": "Buderus MX400"
         },
         "desc": {
-            "en": "Reads all data of the Buderus MX400 heat pump indoor unit via the local API",
-            "de": "Liest alle Daten der Buderus MX400 Wärmepumpen-Inneneinheit über die lokale API",
-            "ru": "Считывает все данные внутреннего блока теплового насоса Buderus MX400 через локальный API",
-            "pt": "Lê todos os dados da unidade interior da bomba de calor Buderus MX400 através da API local",
-            "nl": "Leest alle gegevens van de Buderus MX400 warmtepomp-binnenunit via de lokale API",
-            "fr": "Lit toutes les données de l'unité intérieure de la pompe à chaleur Buderus MX400 via l'API locale",
-            "it": "Legge tutti i dati dell'unità interna della pompa di calore Buderus MX400 tramite l'API locale",
-            "es": "Lee todos los datos de la unidad interior de la bomba de calor Buderus MX400 mediante la API local",
-            "pl": "Odczytuje wszystkie dane jednostki wewnętrznej pompy ciepła Buderus MX400 przez lokalne API",
-            "uk": "Зчитує всі дані внутрішнього блоку теплового насоса Buderus MX400 через локальний API",
-            "zh-cn": "通过本地 API 读取 Buderus MX400 热泵室内机的全部数据"
+            "en": "Reads all data of a Buderus heat pump via the local API of the MX400 LAN and radio module",
+            "de": "Liest alle Daten einer Buderus-Wärmepumpe über die lokale API des LAN- und Funkmoduls MX400",
+            "ru": "Считывает все данные теплового насоса Buderus через локальный API LAN- и радиомодуля MX400",
+            "pt": "Lê todos os dados de uma bomba de calor Buderus através da API local do módulo LAN e rádio MX400",
+            "nl": "Leest alle gegevens van een Buderus-warmtepomp via de lokale API van de MX400 LAN- en radiomodule",
+            "fr": "Lit toutes les données d'une pompe à chaleur Buderus via l'API locale du module LAN et radio MX400",
+            "it": "Legge tutti i dati di una pompa di calore Buderus tramite l'API locale del modulo LAN e radio MX400",
+            "es": "Lee todos los datos de una bomba de calor Buderus mediante la API local del módulo LAN y radio MX400",
+            "pl": "Odczytuje wszystkie dane pompy ciepła Buderus przez lokalne API modułu LAN i radiowego MX400",
+            "uk": "Зчитує всі дані теплового насоса Buderus через локальний API LAN- та радіомодуля MX400",
+            "zh-cn": "通过 MX400 局域网与无线模块的本地 API 读取 Buderus 热泵的全部数据"
         },
-        "authors": ["septa-cr <98657393+septa-cr@users.noreply.github.com>"],
-        "keywords": ["buderus", "mx400", "k40rf", "bosch", "heat pump", "heating", "waermepumpe"],
+        "authors": [
+            "septa-cr <98657393+septa-cr@users.noreply.github.com>"
+        ],
+        "keywords": [
+            "buderus",
+            "mx400",
+            "k40rf",
+            "bosch",
+            "heat pump",
+            "heating",
+            "waermepumpe"
+        ],
         "licenseInformation": {
             "type": "free",
             "license": "MIT"
@@ -75,8 +85,12 @@
             }
         ]
     },
-    "protectedNative": ["token"],
-    "encryptedNative": ["token"],
+    "protectedNative": [
+        "token"
+    ],
+    "encryptedNative": [
+        "token"
+    ],
     "native": {
         "ip": "",
         "token": "",

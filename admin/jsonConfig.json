@@ -5,8 +5,8 @@
         "_connectionHeader": {
             "type": "header",
             "text": {
-                "en": "Connection settings for the indoor unit",
-                "de": "Verbindungseinstellungen zur Inneneinheit"
+                "en": "Connection settings for the MX400",
+                "de": "Verbindungseinstellungen zum MX400"
             },
             "size": 4,
             "newLine": true,
@@ -19,8 +19,8 @@
         "ip": {
             "type": "text",
             "label": {
-                "en": "IP address of the indoor unit (MX400)",
-                "de": "IP-Adresse der Inneneinheit (MX400)"
+                "en": "IP address of the MX400 LAN and radio module",
+                "de": "IP-Adresse des LAN- und Funkmoduls MX400"
             },
             "newLine": true,
             "xs": 12,
@@ -60,8 +60,8 @@
         "_tokenHelpText": {
             "type": "staticText",
             "text": {
-                "en": "The API token is created once with the 'Login' and 'Pass' values from the label of the indoor unit (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the unit at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:",
-                "de": "Der API-Token wird einmalig mit den Werten 'Login' und 'Pass' vom Typenschild der Inneneinheit erzeugt (Gateway-Firmware 15.00.01 oder neuer erforderlich). Dazu die Tasten WLAN und Wireless am Gerät eine Sekunde lang gleichzeitig drücken und den Token innerhalb von 5 Minuten anfordern. Der Token läuft nicht ab und sollte wie ein Passwort behandelt werden. Die Anleitung des Herstellers erklärt alle Schritte:"
+                "en": "The API token is created once with the 'Login' and 'Pass' values from the sticker or information sheet of the MX400 (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the MX400 at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:",
+                "de": "Der API-Token wird einmalig mit den Werten 'Login' und 'Pass' vom Aufkleber bzw. Info-Blatt des MX400 erzeugt (Gateway-Firmware 15.00.01 oder neuer erforderlich). Dazu die Tasten WLAN und Wireless am MX400 eine Sekunde lang gleichzeitig drücken und den Token innerhalb von 5 Minuten anfordern. Der Token läuft nicht ab und sollte wie ein Passwort behandelt werden. Die Anleitung des Herstellers erklärt alle Schritte:"
             },
             "newLine": true,
             "xs": 12,

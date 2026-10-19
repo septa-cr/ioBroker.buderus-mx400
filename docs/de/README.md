@@ -6,16 +6,22 @@
 
 ## Buderus-MX400-Adapter für ioBroker
 
-Dieser Adapter liest die Daten einer **Buderus MX400** Wärmepumpen-Inneneinheit über die offizielle **lokale API** des Herstellers aus. Die Verbindung läuft direkt in deinem Heimnetz, ein Cloud-Konto ist nicht nötig.
+Dieser Adapter liest die Daten einer **Buderus-Wärmepumpe** über die offizielle **lokale API** des **LAN- und Funkmoduls MX400** aus. Die Verbindung läuft direkt in deinem Heimnetz, ein Cloud-Konto ist nicht nötig.
 
-Laut Hersteller bieten auch der Bosch Connect-Key K 40 RF sowie der K 40 RF von IVT, Vulcano und Worcester dieselbe API an. Entwickelt und getestet wurde der Adapter mit einer Buderus MX400.
+<img src="../img/mx400.png" alt="Buderus LAN- und Funkmodul MX400" width="260">
+
+*Das Buderus LAN- und Funkmodul MX400 (per LAN angeschlossen). Mit diesem Modul kommuniziert der Adapter.*
+
+Das MX400 ist das Internet-Gateway und Funkmodul der Heizungsanlage. Es steckt in einem Steckplatz der Wärmepumpe und verbindet sie per LAN oder WLAN mit dem Heimnetz. Laut Hersteller bieten auch der Bosch Connect-Key K 40 RF sowie der K 40 RF von IVT, Vulcano und Worcester dieselbe lokale API an. Entwickelt und getestet wurde der Adapter mit einem Buderus MX400.
+
+Hersteller: [Buderus](https://www.buderus.de) · [Produktinformation zum MX400 (Buderus, PDF)](https://www.buderus.de/resource/blob/84532/5f174d97fdbaf3201210da560b2364a7/18_Buderus_ISH-2025_LAN-%20und-Funkmodul-MX400.pdf)
 
 > **Hinweis:** Die API des Herstellers ist derzeit **nur lesend**. Der Adapter kann alle Werte anzeigen, aber keine Einstellungen an der Wärmepumpe ändern.
 
 ## Funktionen
 
 - **Liest automatisch alle verfügbaren Werte.** Beim Start prüft der Adapter alle Ressourcen aus der API-Beschreibung des Herstellers und legt nur für die Werte Datenpunkte an, die deine Anlage tatsächlich liefert. Zusätzlich werden alle Signale gelesen, die das Gerät selbst meldet.
-- **Deutsche und englische Namen** für alle Datenpunkte, mit den passenden Einheiten (°C, kWh, %, l/h …)
+- **Deutsche und englische Namen** für alle Datenpunkte, mit den passenden Einheiten (°C, kWh, %, l/h …) und Rollen
 - **Energiezähler** (z. B. Gesamtverbrauch, Heizen, Warmwasser) als einzelne Datenpunkte für erzeugte Wärme, Verdichter und Heizstab
 - **Verlaufsdaten** zu Verbrauch, Starts, Laufzeiten und Temperaturen: Tageswerte der letzten 31 Tage, Monatswerte der letzten 12 Monate sowie *heute* und *dieser Monat*. Temperaturen werden als Durchschnitt angezeigt, Energiewerte als Summe.
 - **Zusammengesetzte Antworten** wie Fehlermeldungen oder Systeminformationen werden in einzelne Datenpunkte zerlegt. Die vollständige Antwort steht zusätzlich als JSON bereit.
@@ -23,22 +29,26 @@ Laut Hersteller bieten auch der Bosch Connect-Key K 40 RF sowie der K 40 RF von 
 - **Verbindungsanzeige** (`info.connection`) in der Instanzenliste
 - **Schonend für das Gerät:** Selten veränderliche Werte (Verlaufsdaten, WLAN-Liste) werden nur einmal pro Stunde abgefragt. Ressourcen, die beim Start nicht geantwortet haben, werden stündlich erneut versucht.
 
+<img src="../img/display.jpg" alt="Systemübersicht auf dem Display der Wärmepumpe" width="500">
+
+*Die Systemübersicht auf dem Display der Wärmepumpe. Werte wie Außentemperatur, Vor- und Rücklauftemperatur, Warmwassertemperatur und Betriebsdruck stehen auch in ioBroker zur Verfügung.*
+
 ## Voraussetzungen
 
-- Buderus MX400 (oder ein anderes unterstütztes K-40-RF-Gateway) mit **Gateway-Firmware 15.00.01 oder neuer**
-- Inneneinheit und ioBroker im selben lokalen Netzwerk
-- Ein **API-Token** für das Gerät (siehe unten)
+- Buderus-Wärmepumpe mit dem **LAN- und Funkmodul MX400** (oder einem anderen unterstützten K-40-RF-Gateway) mit **Gateway-Firmware 15.00.01 oder neuer**
+- MX400 und ioBroker im selben lokalen Netzwerk
+- Ein **API-Token** für das MX400 (siehe unten)
 - ioBroker mit js-controller 6.0.11 oder neuer und Admin 7.0.23 oder neuer, empfohlen Node.js 22 oder neuer
 
 ## API-Token erzeugen
 
-Der Token wird **einmalig** mit den Werten `Login` und `Pass` vom Typenschild der Inneneinheit erzeugt. Er läuft nicht ab. Bewahre ihn sicher auf und behandle ihn wie ein Passwort.
+Der Token wird **einmalig** mit den Werten `Login` und `Pass` vom Aufkleber bzw. Info-Blatt des MX400 erzeugt. Er läuft nicht ab. Bewahre ihn sicher auf und behandle ihn wie ein Passwort.
 
 Kurzfassung der Herstelleranleitung:
 
-1. Ermittle die IP-Adresse der Inneneinheit in deinem Router.
+1. Ermittle die IP-Adresse des MX400 in deinem Router.
 2. Entferne beim Wert `Pass` alle Bindestriche.
-3. Drücke die Tasten **WLAN** und **Wireless** am Gerät eine Sekunde lang gleichzeitig. Die LEDs blinken kurz blau.
+3. Drücke die Tasten **WLAN** und **Wireless** am MX400 eine Sekunde lang gleichzeitig. Die LEDs blinken kurz blau.
 4. Fordere **innerhalb von 5 Minuten** den Token an (Port 9442):
 
     ```bash
@@ -58,18 +68,20 @@ Die vollständige Anleitung mit Fehlerbehebung: [K 40 RF API-Dokumentation (Bosc
 
 ## Installation
 
-Solange der Adapter nicht im offiziellen ioBroker-Repository verfügbar ist, wird er direkt von GitHub installiert:
+Solange der Adapter nicht im offiziellen ioBroker-Repository verfügbar ist, wird er über npm oder GitHub installiert:
 
 1. Öffne im ioBroker-Admin den Bereich **Adapter**.
 2. Klicke in der Werkzeugleiste auf das **GitHub-Symbol** ("Installieren aus eigener URL").
-3. Gib im Reiter **Benutzerdefiniert** `https://github.com/septa-cr/ioBroker.buderus-mx400` ein und bestätige.
+3. Gib entweder im Reiter **npm** den Paketnamen `iobroker.buderus-mx400` ein oder im Reiter **Benutzerdefiniert** `https://github.com/septa-cr/ioBroker.buderus-mx400` und bestätige.
 4. Lege eine Instanz des Adapters an.
+
+Alternativ auf der Konsole: `iob url iobroker.buderus-mx400`
 
 ## Einstellungen
 
 | Einstellung | Beschreibung |
 | --- | --- |
-| IP-Adresse der Inneneinheit | IP-Adresse der MX400 in deinem Netzwerk, z. B. `192.168.178.135` |
+| IP-Adresse des MX400 | IP-Adresse des MX400 in deinem Netzwerk, z. B. `192.168.178.135` |
 | API-Token | Der wie oben beschrieben erzeugte Token. Er wird verschlüsselt gespeichert. |
 | Abfrageintervall (Sekunden) | Wie oft die Werte gelesen werden. Standard 60, mindestens 10 |
 
@@ -79,7 +91,7 @@ Beim ersten Start prüft der Adapter alle Ressourcen der API. Das dauert etwa ei
 
 | Ordner | Inhalt |
 | --- | --- |
-| `info.connection` | Verbindung zur Inneneinheit (true/false) |
+| `info.connection` | Verbindung zum MX400 (true/false) |
 | `signals.*` | Alle vom Gerät gemeldeten Signale, z. B. Außentemperatur, Vorlauftemperatur, Verdichterdrehzahl |
 | `heatSources.*` | Wärmepumpe: Temperaturen, Verdichterleistung, Anlagendruck, Energiezähler |
 | `heatingCircuits.hc1.*` | Heizkreis 1: Raumtemperatur, Sollwerte, Pumpe und Status |
@@ -92,7 +104,7 @@ Welche Ordner und Werte erscheinen, hängt von deiner Anlage ab.
 
 ## Hinweise zur Sicherheit
 
-- Die Inneneinheit benutzt ein selbst signiertes Zertifikat. Der Adapter prüft das Zertifikat deshalb, wie vom Hersteller empfohlen, nur für diese eine Verbindung nicht. Die Daten werden trotzdem verschlüsselt übertragen. Benutze den Adapter nur in einem vertrauenswürdigen lokalen Netzwerk.
+- Das MX400 benutzt ein selbst signiertes Zertifikat. Der Adapter prüft das Zertifikat deshalb, wie vom Hersteller empfohlen, nur für diese eine Verbindung nicht. Die Daten werden trotzdem verschlüsselt übertragen. Benutze den Adapter nur in einem vertrauenswürdigen lokalen Netzwerk.
 - Der Token wird in ioBroker verschlüsselt gespeichert und nur dem Adapter selbst zur Verfügung gestellt.
 
 ## Entwicklung unterstützen

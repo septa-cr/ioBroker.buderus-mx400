@@ -42,6 +42,150 @@ function normalizeUnit(unit) {
 }
 
 /**
+ * Passende Rolle für einen Zahlenwert anhand seiner Einheit.
+ *
+ * @param {string | undefined} unit - Einheit
+ * @param {string} apiPath - API-Pfad (zur Erkennung der Luftfeuchtigkeit)
+ * @returns {string} Rolle des Datenpunkts
+ */
+function numberRole(unit, apiPath) {
+	switch (unit) {
+		case '°C':
+			return 'value.temperature';
+		case 'kWh':
+		case 'Wh':
+			return 'value.energy';
+		case 'W':
+		case 'kW':
+			return 'value.power';
+		case 'bar':
+			return 'value.pressure';
+		default:
+			return unit === '%' && /humidity/i.test(apiPath) ? 'value.humidity' : 'value';
+	}
+}
+
+/** Lesbare Namen für die Ordner im Objektbaum */
+/** @type {Record<string, ioBroker.Translated>} */
+const FOLDER_NAMES = {
+	signals: { en: 'Signals', de: 'Signale' },
+	heatSources: { en: 'Heat sources', de: 'Wärmeerzeuger' },
+	heatingCircuits: { en: 'Heating circuits', de: 'Heizkreise' },
+	dhwCircuits: { en: 'Hot water circuits', de: 'Warmwasserkreise' },
+	devices: { en: 'Devices', de: 'Geräte' },
+	recordings: { en: 'History', de: 'Verlaufsdaten' },
+	system: { en: 'System', de: 'System' },
+	gateway: { en: 'Gateway', de: 'Gateway' },
+	zones: { en: 'Zones', de: 'Zonen' },
+	solarCircuits: { en: 'Solar circuits', de: 'Solarkreise' },
+	ventilation: { en: 'Ventilation', de: 'Lüftung' },
+	pool: { en: 'Pool', de: 'Pool' },
+	emon: { en: 'Energy monitoring', de: 'Energiezähler' },
+	sensors: { en: 'Sensors', de: 'Sensoren' },
+	temperatures: { en: 'Temperatures', de: 'Temperaturen' },
+	refrigerant: { en: 'Refrigerant circuit', de: 'Kältekreis' },
+	brineCircuit: { en: 'Brine circuit', de: 'Solekreis' },
+	powerConstraints: { en: 'Power constraints', de: 'Leistungsbeschränkungen' },
+	externalInputs: { en: 'External inputs', de: 'Externe Eingänge' },
+	variableTariff: { en: 'Variable tariff', de: 'Variabler Tarif' },
+	wifi: { en: 'Wi-Fi', de: 'WLAN' },
+	eth: { en: 'Ethernet', de: 'LAN' },
+	update: { en: 'Update', de: 'Update' },
+	Source: { en: 'Source', de: 'Quelle' },
+	additionalHeater: { en: 'Additional heater', de: 'Zuheizer' },
+	additionalHeaterBlock: { en: 'Additional heater block', de: 'Zuheizer-Sperre' },
+	affectedDomain: { en: 'Affected domains', de: 'Betroffene Bereiche' },
+	appliancePowerBlock: { en: 'Power block', de: 'Leistungssperre' },
+	appliancePowerLimit: { en: 'Power limit', de: 'Leistungsbegrenzung' },
+	ch: { en: 'Heating', de: 'Heizen' },
+	compressor: { en: 'Compressor', de: 'Verdichter' },
+	cooling: { en: 'Cooling', de: 'Kühlen' },
+	coolingBlock: { en: 'Cooling block', de: 'Kühlsperre' },
+	dataProcessing: { en: 'Data processing', de: 'Datenverarbeitung' },
+	dhw: { en: 'Hot water', de: 'Warmwasser' },
+	dhwBlock: { en: 'Hot water block', de: 'Warmwassersperre' },
+	dhwReduceTempOnAlarm: { en: 'Hot water reduction on alarm', de: 'Warmwasser-Absenkung bei Alarm' },
+	eHeater: { en: 'Electric heater', de: 'Elektroheizstab' },
+	fallbackOperation: { en: 'Fallback operation', de: 'Notbetrieb' },
+	filter: { en: 'Filter', de: 'Filter' },
+	heating: { en: 'Heating', de: 'Heizen' },
+	heatingBlock: { en: 'Heating block', de: 'Heizsperre' },
+	highSourceTempStopCooling: { en: 'Cooling stop high source temperature', de: 'Kühlstopp hohe Quellentemperatur' },
+	highSourceTempStopHeating: { en: 'Heating stop high source temperature', de: 'Heizstopp hohe Quellentemperatur' },
+	hybrid: { en: 'Hybrid', de: 'Hybrid' },
+	ip: { en: 'IP address', de: 'IP-Adresse' },
+	lowSourceTempStopCooling: { en: 'Cooling stop low source temperature', de: 'Kühlstopp niedrige Quellentemperatur' },
+	lowSourceTempStopHeating: { en: 'Heating stop low source temperature', de: 'Heizstopp niedrige Quellentemperatur' },
+	maintenanceMode: { en: 'Maintenance mode', de: 'Wartungsmodus' },
+	openWindowDetection: { en: 'Open window detection', de: 'Fenster-offen-Erkennung' },
+	powerElecDesired: { en: 'Desired electrical power', de: 'Gewünschte elektrische Leistung' },
+	powerElecLimitation: { en: 'Electrical power limitation', de: 'Begrenzung elektrische Leistung' },
+	powerGuard: { en: 'Power guard', de: 'Leistungswächter' },
+	powerLimitation: { en: 'Power limitation', de: 'Leistungsbegrenzung' },
+	primary: { en: 'Primary circuit', de: 'Primärkreis' },
+	pv: { en: 'Photovoltaics', de: 'Photovoltaik' },
+	safetyBoard: { en: 'Safety board', de: 'Sicherheitsplatine' },
+	silentMode: { en: 'Silent mode', de: 'Flüsterbetrieb' },
+	smartFunction: { en: 'Smart function', de: 'Smart-Funktion' },
+	status: { en: 'Status', de: 'Status' },
+	summerBypass: { en: 'Summer bypass', de: 'Sommer-Bypass' },
+	total: { en: 'Total', de: 'Gesamt' },
+	tzInfo: { en: 'Time zone', de: 'Zeitzone' },
+	userAdditionalHeaterBlock: { en: 'User additional heater block', de: 'Zuheizer-Sperre durch Benutzer' },
+	workingTime: { en: 'Working time', de: 'Laufzeit' },
+	// Ordner der Signale
+	Stats: { en: 'Statistics', de: 'Statistik' },
+	Timer: { en: 'Timer', de: 'Timer' },
+	RelayStatus: { en: 'Relay status', de: 'Relaisstatus' },
+	HolidayNew: { en: 'Holiday programs', de: 'Urlaubsprogramme' },
+	InstallationDate: { en: 'Installation date', de: 'Installationsdatum' },
+	SeasonOpt: { en: 'Season optimization', de: 'Saisonoptimierung' },
+	LocSeasonOpt: { en: 'Local season optimization', de: 'Lokale Saisonoptimierung' },
+	FlowCtrl: { en: 'Flow control', de: 'Vorlaufregelung' },
+	IntDHW: { en: 'Internal hot water', de: 'Warmwasser intern' },
+	HMI: { en: 'Control unit', de: 'Bedieneinheit' },
+	EM: { en: 'Energy manager', de: 'Energiemanager' },
+	CH: { en: 'Heating', de: 'Heizen' },
+	DHW: { en: 'Hot water', de: 'Warmwasser' },
+	Cooling: { en: 'Cooling', de: 'Kühlen' },
+	Additional: { en: 'Additional heater', de: 'Zuheizer' },
+};
+
+/** Muster für nummerierte Ordner, z. B. hc1 = Heizkreis 1 */
+/** @type {[RegExp, string, string][]} */
+const NUMBERED_FOLDERS = [
+	[/^hc(\d+)$/, 'Heating circuit', 'Heizkreis'],
+	[/^dhw(\d+)$/, 'Hot water circuit', 'Warmwasserkreis'],
+	[/^hs(\d+)$/, 'Heat source', 'Wärmeerzeuger'],
+	[/^device(\d+)$/, 'Device', 'Gerät'],
+	[/^zone(\d+)$/, 'Zone', 'Zone'],
+	[/^sc(\d+)$/, 'Solar circuit', 'Solarkreis'],
+	[/^input(\d+)$/, 'Input', 'Eingang'],
+	[/^HP(\d+)$/, 'Heat pump', 'Wärmepumpe'],
+	[/^HC(\d+)$/, 'Heating circuit', 'Heizkreis'],
+	[/^DHW(\d+)$/, 'Hot water circuit', 'Warmwasserkreis'],
+];
+
+/**
+ * Lesbarer Name für einen Ordner im Objektbaum.
+ *
+ * @param {string} segment - Teil der Datenpunkt-ID, z. B. heatingCircuits oder hc1
+ * @returns {ioBroker.StringOrTranslated} Name
+ */
+function folderName(segment) {
+	if (FOLDER_NAMES[segment]) {
+		return FOLDER_NAMES[segment];
+	}
+	for (const [pattern, en, de] of NUMBERED_FOLDERS) {
+		const match = pattern.exec(segment);
+		if (match) {
+			return { en: `${en} ${match[1]}`, de: `${de} ${match[1]}` };
+		}
+	}
+	return segment;
+}
+
+/**
  * Name eines Datenpunkts aus der Übersetzungsdatei (deutsch und englisch), sonst der API-Pfad.
  *
  * @param {string} apiPath - API-Pfad
@@ -162,6 +306,9 @@ class BuderusMx400 extends utils.Adapter {
 
 		/** @type {Set<string>} */
 		this.knownStates = new Set();
+		/** Bereits angelegte Ordner und Kanäle */
+		/** @type {Set<string>} */
+		this.knownObjects = new Set();
 		/** Datenpunkte, die in einzelne Werte aufgeteilt werden (alte Textdatenpunkte wurden entfernt) */
 		/** @type {Set<string>} */
 		this.expandedStates = new Set();
@@ -280,6 +427,7 @@ class BuderusMx400 extends utils.Adapter {
 	 */
 	async setValue(id, name, val, type, role, unit) {
 		if (!this.knownStates.has(id)) {
+			await this.ensureParents(id);
 			await this.extendObjectAsync(id, {
 				type: 'state',
 				common: {
@@ -295,6 +443,43 @@ class BuderusMx400 extends utils.Adapter {
 			this.knownStates.add(id);
 		}
 		await this.setState(id, { val, ack: true });
+	}
+
+	/**
+	 * Legt fehlende Ordner oberhalb eines Objekts an. Laut ioBroker-Regeln sollen Unterstrukturen
+	 * aus Objekten vom Typ folder, channel oder device bestehen und Datenpunkte nur auf der letzten Ebene liegen.
+	 *
+	 * @param {string} id - ID des Datenpunkts oder Kanals
+	 */
+	async ensureParents(id) {
+		const parts = id.split('.');
+		for (let i = 1; i < parts.length; i++) {
+			const parentId = parts.slice(0, i).join('.');
+			if (this.knownObjects.has(parentId)) {
+				continue;
+			}
+			await this.extendObjectAsync(parentId, {
+				type: 'folder',
+				common: { name: folderName(parts[i - 1]) },
+				native: {},
+			});
+			this.knownObjects.add(parentId);
+		}
+	}
+
+	/**
+	 * Legt einen Kanal an, der mehrere Werte einer API-Antwort zusammenfasst (z. B. Energiezähler, Verlaufsdaten).
+	 *
+	 * @param {string} id - ID des Kanals
+	 * @param {ioBroker.StringOrTranslated} name - Name des Kanals
+	 */
+	async ensureChannel(id, name) {
+		if (this.knownObjects.has(id)) {
+			return;
+		}
+		await this.ensureParents(id);
+		await this.extendObjectAsync(id, { type: 'channel', common: { name }, native: {} });
+		this.knownObjects.add(id);
 	}
 
 	/**
@@ -315,7 +500,7 @@ class BuderusMx400 extends utils.Adapter {
 			return;
 		}
 		const { val, type, unit } = this.convertValue(data);
-		const role = type === 'boolean' ? 'indicator' : type === 'number' ? 'value' : 'text';
+		const role = type === 'boolean' ? 'indicator' : type === 'number' ? numberRole(unit, apiPath) : 'text';
 		await this.setValue(toId(apiPath), nameFor(apiPath), val, type, role, unit);
 	}
 
@@ -328,12 +513,14 @@ class BuderusMx400 extends utils.Adapter {
 	async writeEnergyCounters(apiPath, data) {
 		const base = toId(apiPath);
 		await this.replaceLegacyState(base);
+		await this.ensureChannel(base, nameFor(apiPath));
 		const unit = normalizeUnit(data.unit);
+		const role = numberRole(unit, apiPath);
 		for (const entry of data.values) {
 			for (const [key, value] of Object.entries(entry ?? {})) {
 				const counterId = `${base}.${key.replace(/[^A-Za-z0-9_-]/g, '_')}`;
 				const name = withPart(nameFor(apiPath), names.keys[key] ?? key);
-				await this.setValue(counterId, name, Number(value), 'number', 'value', unit);
+				await this.setValue(counterId, name, Number(value), 'number', role, unit);
 			}
 		}
 	}
@@ -371,6 +558,7 @@ class BuderusMx400 extends utils.Adapter {
 		delete content.writeable;
 		delete content.type;
 		const baseName = nameFor(apiPath);
+		await this.ensureChannel(base, baseName);
 		const jsonName = withPart(baseName, names.suffixes.json);
 		await this.setValue(`${base}.json`, jsonName, JSON.stringify(content), 'string', 'json');
 
@@ -427,6 +615,8 @@ class BuderusMx400 extends utils.Adapter {
 
 		const base = toId(apiPath);
 		const baseName = nameFor(apiPath);
+		const role = numberRole(unit, apiPath);
+		await this.ensureChannel(base, baseName);
 		if (daily) {
 			await this.setValue(
 				`${base}.daily`,
@@ -440,7 +630,7 @@ class BuderusMx400 extends utils.Adapter {
 				withPart(baseName, names.suffixes.today),
 				lastDay?.date === today ? lastDay.value : null,
 				'number',
-				'value',
+				role,
 				unit,
 			);
 		}
@@ -457,7 +647,7 @@ class BuderusMx400 extends utils.Adapter {
 				withPart(baseName, names.suffixes.thisMonth),
 				lastMonth?.date === today.slice(0, 7) ? lastMonth.value : null,
 				'number',
-				'value',
+				role,
 				unit,
 			);
 		}
