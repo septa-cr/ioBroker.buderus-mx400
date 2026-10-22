@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "buderus-mx400",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
+            "0.0.2": {
+                "en": "Corrected the package description (LAN and radio module MX400)",
+                "de": "Paketbeschreibung korrigiert (LAN- und Funkmodul MX400)",
+                "ru": "Исправлено описание пакета (LAN- и радиомодуль MX400)",
+                "pt": "Descrição do pacote corrigida (módulo LAN e rádio MX400)",
+                "nl": "Pakketbeschrijving gecorrigeerd (LAN- en radiomodule MX400)",
+                "fr": "Description du paquet corrigée (module LAN et radio MX400)",
+                "it": "Descrizione del pacchetto corretta (modulo LAN e radio MX400)",
+                "es": "Descripción del paquete corregida (módulo LAN y radio MX400)",
+                "pl": "Poprawiono opis pakietu (moduł LAN i radiowy MX400)",
+                "uk": "Виправлено опис пакета (LAN- та радіомодуль MX400)",
+                "zh-cn": "更正了软件包说明（MX400 局域网与无线模块）"
+            },
             "0.0.1": {
                 "en": "Initial release: reads all values of the Buderus MX400 LAN and radio module via the local API (signals, energy counters, history data), German and English data point names, connection indicator",
                 "de": "Erstveröffentlichung: liest alle Werte des Buderus LAN- und Funkmoduls MX400 über die lokale API (Signale, Energiezähler, Verlaufsdaten), deutsche und englische Datenpunktnamen, Verbindungsanzeige",
