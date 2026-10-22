@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "buderus-mx400",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "Adjusted to the requirements of the ioBroker repository: minimum Node.js 22, tests with Node.js 22, 24 and 26, automated releases via trusted publishing, updated contact address and installation notes",
+                "de": "An die Anforderungen des ioBroker-Repositorys angepasst: mindestens Node.js 22, Tests mit Node.js 22, 24 und 26, automatische Releases über Trusted Publishing, neue Kontaktadresse und Installationshinweise",
+                "ru": "Адаптировано к требованиям репозитория ioBroker: минимум Node.js 22, тесты с Node.js 22, 24 и 26, автоматические релизы с помощью доверенной публикации, обновленный контактный адрес и примечания по установке",
+                "pt": "Ajustado aos requisitos do repositório ioBroker: mínimo Node.js 22, testes com Node.js 22, 24 e 26, versões automáticas via publicação confiável, endereço de contato atualizado e notas de instalação",
+                "nl": "Aangepast aan de vereisten van de ioBroker-repository: minimaal Node.js 22, tests met Node.js 22, 24 en 26, geautomatiseerde releases via betrouwbare publicatie, bijgewerkt contactadres en installatienotities",
+                "fr": "Adapté aux exigences du référentiel ioBroker : Node.js 22 au minimum, tests avec Node.js 22, 24 et 26, versions automatisées via Trusted Publishing, adresse de contact et notes d'installation mises à jour",
+                "it": "Adattato ai requisiti del repository ioBroker: minimo Node.js 22, test con Node.js 22, 24 e 26, release automatiche tramite Trusted Publishing, indirizzo di contatto e note di installazione aggiornati",
+                "es": "Ajustado a los requisitos del repositorio de ioBroker: mínimo Node.js 22, pruebas con Node.js 22, 24 y 26, publicaciones automatizadas mediante publicación fiable, dirección de contacto y notas de instalación actualizadas",
+                "pl": "Dostosowane do wymagań repozytorium ioBroker: minimum Node.js 22, testy z Node.js 22, 24 i 26, zautomatyzowane wersje poprzez zaufane publikowanie, zaktualizowany adres kontaktowy i uwagi dotyczące instalacji",
+                "uk": "Адаптовано до вимог сховища ioBroker: мінімум Node.js 22, тести з Node.js 22, 24 та 26, автоматизовані випуски через довірену публікацію, оновлена контактна адреса та примітки щодо встановлення",
+                "zh-cn": "根据 ioBroker 存储库的要求进行了调整：最低 Node.js 22，使用 Node.js 22、24 和 26 进行测试，通过可信发布自动发布，更新了联系地址和安装说明"
+            },
             "0.0.3": {
                 "en": "Settings page translated into all languages, more precise state roles for energy counters, minimum Node.js version documented",
                 "de": "Einstellungsseite in alle Sprachen übersetzt, genauere Rollen für Energiezähler, Mindestversion von Node.js dokumentiert",

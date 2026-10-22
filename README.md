@@ -121,8 +121,7 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.0.4 (2026-10-22)
 
 - (septa-cr) Adjusted to the requirements of the ioBroker repository: minimum Node.js 22, tests with Node.js 22, 24 and 26, automated releases via trusted publishing, updated contact address and installation notes
 
