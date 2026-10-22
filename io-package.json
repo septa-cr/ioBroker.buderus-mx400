@@ -70,7 +70,7 @@
             "zh-cn": "通过 MX400 局域网与无线模块的本地 API 读取 Buderus 热泵的全部数据"
         },
         "authors": [
-            "septa-cr <98657393+septa-cr@users.noreply.github.com>"
+            "septa-cr <septamobile@gmail.com>"
         ],
         "keywords": [
             "buderus",
@@ -107,7 +107,7 @@
         ],
         "globalDependencies": [
             {
-                "admin": ">=7.0.23"
+                "admin": ">=7.6.20"
             }
         ]
     },

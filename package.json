@@ -4,7 +4,7 @@
   "description": "Reads all data of a Buderus heat pump via the local API of the MX400 LAN and radio module",
   "author": {
     "name": "septa-cr",
-    "email": "98657393+septa-cr@users.noreply.github.com"
+    "email": "septamobile@gmail.com"
   },
   "contributors": [],
   "homepage": "https://github.com/septa-cr/ioBroker.buderus-mx400",
@@ -23,7 +23,7 @@
     "url": "https://github.com/septa-cr/ioBroker.buderus-mx400.git"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">=22"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.3"

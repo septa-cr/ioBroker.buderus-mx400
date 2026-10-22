@@ -43,7 +43,7 @@ Manufacturer: [Buderus](https://www.buderus.de) · [Product information on the M
 - The MX400 and ioBroker must be in the same local network.
 - An **API token** for the MX400 (see below)
 - ioBroker with js-controller 6.0.11 or newer and Admin 7.0.23 or newer
-- Node.js 20 or newer (Node.js 22 or newer recommended)
+- Node.js 22 or newer
 
 ## Creating the API token
 
@@ -73,14 +73,7 @@ The complete guide with troubleshooting: [K 40 RF API documentation (Bosch Home 
 
 ## Installation
 
-As long as the adapter is not available in the official ioBroker repository, install it via npm or GitHub:
-
-1. In the ioBroker Admin, open **Adapters**.
-2. Click the **GitHub icon** ("Install from custom URL") in the toolbar.
-3. Either enter the package name `iobroker.buderus-mx400` on the **npm** tab, or enter `https://github.com/septa-cr/ioBroker.buderus-mx400` on the **Custom** tab, and confirm.
-4. Create an instance of the adapter.
-
-Alternatively, on the command line: `iob url iobroker.buderus-mx400`
+Install the adapter via the adapter list of the ioBroker Admin: open **Adapters**, search for *Buderus MX400* and install it. Then create an instance of the adapter.
 
 ## Configuration
 
@@ -133,7 +126,7 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
 
 - (septa-cr) The settings page is now translated into all languages
 - (septa-cr) More precise state roles for energy counters (`value.power.consumption`)
-- (septa-cr) Minimum Node.js version documented
+- (septa-cr) Minimum Node.js version documented (Node.js 22)
 
 ### 0.0.2 (2026-10-22)
 
@@ -147,7 +140,7 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
 
 MIT License
 
-Copyright (c) 2026 septa-cr <98657393+septa-cr@users.noreply.github.com>
+Copyright (c) 2026 septa-cr <septamobile@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

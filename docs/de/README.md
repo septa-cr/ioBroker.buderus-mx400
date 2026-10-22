@@ -39,7 +39,7 @@ Hersteller: [Buderus](https://www.buderus.de) · [Produktinformation zum MX400 (
 - MX400 und ioBroker im selben lokalen Netzwerk
 - Ein **API-Token** für das MX400 (siehe unten)
 - ioBroker mit js-controller 6.0.11 oder neuer und Admin 7.0.23 oder neuer
-- Node.js 20 oder neuer (empfohlen: Node.js 22 oder neuer)
+- Node.js 22 oder neuer
 
 ## API-Token erzeugen
 
@@ -69,14 +69,7 @@ Die vollständige Anleitung mit Fehlerbehebung: [K 40 RF API-Dokumentation (Bosc
 
 ## Installation
 
-Solange der Adapter nicht im offiziellen ioBroker-Repository verfügbar ist, wird er über npm oder GitHub installiert:
-
-1. Öffne im ioBroker-Admin den Bereich **Adapter**.
-2. Klicke in der Werkzeugleiste auf das **GitHub-Symbol** ("Installieren aus eigener URL").
-3. Gib entweder im Reiter **npm** den Paketnamen `iobroker.buderus-mx400` ein oder im Reiter **Benutzerdefiniert** `https://github.com/septa-cr/ioBroker.buderus-mx400` und bestätige.
-4. Lege eine Instanz des Adapters an.
-
-Alternativ auf der Konsole: `iob url iobroker.buderus-mx400`
+Installiere den Adapter über die Adapterliste im ioBroker-Admin: Öffne den Bereich **Adapter**, suche nach *Buderus MX400* und installiere ihn. Lege danach eine Instanz des Adapters an.
 
 ## Einstellungen
 
