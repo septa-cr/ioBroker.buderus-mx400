@@ -1,5 +1,10 @@
 {
-	"buderus-mx400 adapter settings": "Налаштування адаптера для buderus-mx400",
-	"option1": "варіант1",
-	"option2": "варіант2"
+    "Connection settings for the MX400": "Налаштування підключення до MX400",
+    "IP address of the MX400 LAN and radio module": "IP-адреса LAN- та радіомодуля MX400",
+    "API token": "API-токен",
+    "Polling interval (seconds)": "Інтервал опитування (секунди)",
+    "The API token is created once with the 'Login' and 'Pass' values from the sticker or information sheet of the MX400 (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the MX400 at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:": "API-токен створюється один раз за допомогою значень «Login» і «Pass» з наклейки або інформаційного аркуша MX400 (потрібна прошивка шлюзу 15.00.01 або новіша). Для цього одночасно натисніть на MX400 кнопки WLAN і Wireless на одну секунду та запитайте токен протягом 5 хвилин. Токен не спливає, тому поводьтеся з ним як з паролем. Усі кроки описано в посібнику виробника:",
+    "Manufacturer's guide: create an API token": "Посібник виробника: створення API-токена",
+    "Do you like this adapter? You can support its development with a coffee donation.": "Подобається цей адаптер? Ви можете підтримати його розвиток чашкою кави.",
+    "Donate a coffee via PayPal": "Пригостити кавою через PayPal"
 }

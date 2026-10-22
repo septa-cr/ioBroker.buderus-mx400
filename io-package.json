@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "buderus-mx400",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "news": {
+            "0.0.3": {
+                "en": "Settings page translated into all languages, more precise state roles for energy counters, minimum Node.js version documented",
+                "de": "Einstellungsseite in alle Sprachen übersetzt, genauere Rollen für Energiezähler, Mindestversion von Node.js dokumentiert",
+                "ru": "Страница настроек переведена на все языки, более точные роли для счётчиков энергии, указана минимальная версия Node.js",
+                "pt": "Página de definições traduzida para todos os idiomas, funções mais precisas para os contadores de energia, versão mínima do Node.js documentada",
+                "nl": "Instellingenpagina in alle talen vertaald, nauwkeurigere rollen voor energiemeters, minimale Node.js-versie gedocumenteerd",
+                "fr": "Page de paramètres traduite dans toutes les langues, rôles plus précis pour les compteurs d'énergie, version minimale de Node.js documentée",
+                "it": "Pagina delle impostazioni tradotta in tutte le lingue, ruoli più precisi per i contatori di energia, versione minima di Node.js documentata",
+                "es": "Página de ajustes traducida a todos los idiomas, roles más precisos para los contadores de energía, versión mínima de Node.js documentada",
+                "pl": "Strona ustawień przetłumaczona na wszystkie języki, dokładniejsze role dla liczników energii, udokumentowano minimalną wersję Node.js",
+                "uk": "Сторінку налаштувань перекладено всіма мовами, точніші ролі для лічильників енергії, вказано мінімальну версію Node.js",
+                "zh-cn": "设置页面已翻译成所有语言，能量计数器的角色更精确，并注明了最低 Node.js 版本"
+            },
             "0.0.2": {
                 "en": "Corrected the package description (LAN and radio module MX400)",
                 "de": "Paketbeschreibung korrigiert (LAN- und Funkmodul MX400)",

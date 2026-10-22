@@ -1,5 +1,10 @@
 {
-	"buderus-mx400 adapter settings": "buderus-mx400的适配器设置",
-	"option1": "选项1",
-	"option2": "选项2"
+    "Connection settings for the MX400": "MX400 连接设置",
+    "IP address of the MX400 LAN and radio module": "MX400 局域网与无线模块的 IP 地址",
+    "API token": "API 令牌",
+    "Polling interval (seconds)": "查询间隔（秒）",
+    "The API token is created once with the 'Login' and 'Pass' values from the sticker or information sheet of the MX400 (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the MX400 at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:": "API 令牌只需创建一次，使用 MX400 标签或信息页上的“Login”和“Pass”值（需要网关固件 15.00.01 或更高版本）。为此，请在 MX400 上同时按下 WLAN 和 Wireless 按钮一秒钟，并在 5 分钟内申请令牌。令牌不会过期，请像对待密码一样妥善保管。制造商的指南说明了所有步骤：",
+    "Manufacturer's guide: create an API token": "制造商指南：创建 API 令牌",
+    "Do you like this adapter? You can support its development with a coffee donation.": "喜欢这个适配器吗？您可以请开发者喝杯咖啡来支持开发。",
+    "Donate a coffee via PayPal": "通过 PayPal 请喝咖啡"
 }

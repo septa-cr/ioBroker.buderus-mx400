@@ -54,7 +54,7 @@ function numberRole(unit, apiPath) {
 			return 'value.temperature';
 		case 'kWh':
 		case 'Wh':
-			return 'value.energy';
+			return 'value.power.consumption';
 		case 'W':
 		case 'kW':
 			return 'value.power';

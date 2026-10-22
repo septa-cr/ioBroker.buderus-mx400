@@ -42,7 +42,8 @@ Manufacturer: [Buderus](https://www.buderus.de) · [Product information on the M
 - Buderus heat pump with the **LAN and radio module MX400** (or another supported K 40 RF gateway) with **gateway firmware 15.00.01 or newer**
 - The MX400 and ioBroker must be in the same local network.
 - An **API token** for the MX400 (see below)
-- ioBroker with js-controller 6.0.11 or newer and Admin 7.0.23 or newer, Node.js 22 or newer recommended
+- ioBroker with js-controller 6.0.11 or newer and Admin 7.0.23 or newer
+- Node.js 20 or newer (Node.js 22 or newer recommended)
 
 ## Creating the API token
 
@@ -127,6 +128,12 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### 0.0.3 (2026-10-23)
+
+- (septa-cr) The settings page is now translated into all languages
+- (septa-cr) More precise state roles for energy counters (`value.power.consumption`)
+- (septa-cr) Minimum Node.js version documented
 
 ### 0.0.2 (2026-10-22)
 

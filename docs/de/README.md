@@ -38,7 +38,8 @@ Hersteller: [Buderus](https://www.buderus.de) · [Produktinformation zum MX400 (
 - Buderus-Wärmepumpe mit dem **LAN- und Funkmodul MX400** (oder einem anderen unterstützten K-40-RF-Gateway) mit **Gateway-Firmware 15.00.01 oder neuer**
 - MX400 und ioBroker im selben lokalen Netzwerk
 - Ein **API-Token** für das MX400 (siehe unten)
-- ioBroker mit js-controller 6.0.11 oder neuer und Admin 7.0.23 oder neuer, empfohlen Node.js 22 oder neuer
+- ioBroker mit js-controller 6.0.11 oder neuer und Admin 7.0.23 oder neuer
+- Node.js 20 oder neuer (empfohlen: Node.js 22 oder neuer)
 
 ## API-Token erzeugen
 

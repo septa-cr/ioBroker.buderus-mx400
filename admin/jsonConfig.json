@@ -4,10 +4,7 @@
     "items": {
         "_connectionHeader": {
             "type": "header",
-            "text": {
-                "en": "Connection settings for the MX400",
-                "de": "Verbindungseinstellungen zum MX400"
-            },
+            "text": "Connection settings for the MX400",
             "size": 4,
             "newLine": true,
             "xs": 12,
@@ -18,10 +15,7 @@
         },
         "ip": {
             "type": "text",
-            "label": {
-                "en": "IP address of the MX400 LAN and radio module",
-                "de": "IP-Adresse des LAN- und Funkmoduls MX400"
-            },
+            "label": "IP address of the MX400 LAN and radio module",
             "newLine": true,
             "xs": 12,
             "sm": 12,
@@ -31,10 +25,7 @@
         },
         "token": {
             "type": "password",
-            "label": {
-                "en": "API token",
-                "de": "API-Token"
-            },
+            "label": "API token",
             "newLine": true,
             "xs": 12,
             "sm": 12,
@@ -44,10 +35,7 @@
         },
         "interval": {
             "type": "number",
-            "label": {
-                "en": "Polling interval (seconds)",
-                "de": "Abfrageintervall (Sekunden)"
-            },
+            "label": "Polling interval (seconds)",
             "min": 10,
             "max": 3600,
             "newLine": true,
@@ -59,10 +47,7 @@
         },
         "_tokenHelpText": {
             "type": "staticText",
-            "text": {
-                "en": "The API token is created once with the 'Login' and 'Pass' values from the sticker or information sheet of the MX400 (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the MX400 at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:",
-                "de": "Der API-Token wird einmalig mit den Werten 'Login' und 'Pass' vom Aufkleber bzw. Info-Blatt des MX400 erzeugt (Gateway-Firmware 15.00.01 oder neuer erforderlich). Dazu die Tasten WLAN und Wireless am MX400 eine Sekunde lang gleichzeitig drücken und den Token innerhalb von 5 Minuten anfordern. Der Token läuft nicht ab und sollte wie ein Passwort behandelt werden. Die Anleitung des Herstellers erklärt alle Schritte:"
-            },
+            "text": "The API token is created once with the 'Login' and 'Pass' values from the sticker or information sheet of the MX400 (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the MX400 at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:",
             "newLine": true,
             "xs": 12,
             "sm": 12,
@@ -72,10 +57,7 @@
         },
         "_tokenHelpLink": {
             "type": "staticLink",
-            "label": {
-                "en": "Manufacturer's guide: create an API token",
-                "de": "Anleitung des Herstellers: API-Token erzeugen"
-            },
+            "label": "Manufacturer's guide: create an API token",
             "href": "https://github.com/bosch-home-comfort/api-docs/blob/main/docs/k-40-rf.md",
             "target": "_blank",
             "button": true,
@@ -94,10 +76,7 @@
         },
         "_donateText": {
             "type": "staticText",
-            "text": {
-                "en": "Do you like this adapter? You can support its development with a coffee donation.",
-                "de": "Gefällt dir der Adapter? Mit einer Kaffeespende unterstützt du die Weiterentwicklung."
-            },
+            "text": "Do you like this adapter? You can support its development with a coffee donation.",
             "newLine": true,
             "xs": 12,
             "sm": 12,
@@ -107,10 +86,7 @@
         },
         "_donateButton": {
             "type": "staticLink",
-            "label": {
-                "en": "Donate a coffee via PayPal",
-                "de": "Kaffee spenden über PayPal"
-            },
+            "label": "Donate a coffee via PayPal",
             "href": "https://www.paypal.com/donate/?hosted_button_id=BW2WL8QCH2AMU",
             "target": "_blank",
             "button": true,
