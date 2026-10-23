@@ -4,7 +4,7 @@ const utils = require('@iobroker/adapter-core');
 const https = require('node:https');
 const crypto = require('node:crypto');
 const endpoints = require('./lib/endpoints.json');
-/** @type {{ paths: Record<string, ioBroker.Translated>, templates: Record<string, ioBroker.Translated>, keys: Record<string, ioBroker.Translated>, suffixes: Record<string, ioBroker.Translated> }} */
+/** @type {{ paths: Record<string, ioBroker.Translated>, templates: Record<string, ioBroker.Translated>, keys: Record<string, ioBroker.Translated>, suffixes: Record<string, ioBroker.Translated>, folders: Record<string, ioBroker.Translated>, numberedFolders: Record<string, ioBroker.Translated>, info: Record<string, ioBroker.Translated> }} */
 const names = require('./lib/names.json');
 
 /** Abstand, in dem die Suche nach den vorhandenen Pfaden komplett wiederholt wird (24 Stunden) */
@@ -72,121 +72,51 @@ function numberRole(unit, apiPath) {
 	}
 }
 
-/** Lesbare Namen für die Ordner im Objektbaum */
-/** @type {Record<string, ioBroker.Translated>} */
-const FOLDER_NAMES = {
-	signals: { en: 'Signals', de: 'Signale' },
-	heatSources: { en: 'Heat sources', de: 'Wärmeerzeuger' },
-	heatingCircuits: { en: 'Heating circuits', de: 'Heizkreise' },
-	dhwCircuits: { en: 'Hot water circuits', de: 'Warmwasserkreise' },
-	devices: { en: 'Devices', de: 'Geräte' },
-	recordings: { en: 'History', de: 'Verlaufsdaten' },
-	system: { en: 'System', de: 'System' },
-	gateway: { en: 'Gateway', de: 'Gateway' },
-	zones: { en: 'Zones', de: 'Zonen' },
-	solarCircuits: { en: 'Solar circuits', de: 'Solarkreise' },
-	ventilation: { en: 'Ventilation', de: 'Lüftung' },
-	pool: { en: 'Pool', de: 'Pool' },
-	emon: { en: 'Energy monitoring', de: 'Energiezähler' },
-	sensors: { en: 'Sensors', de: 'Sensoren' },
-	temperatures: { en: 'Temperatures', de: 'Temperaturen' },
-	refrigerant: { en: 'Refrigerant circuit', de: 'Kältekreis' },
-	brineCircuit: { en: 'Brine circuit', de: 'Solekreis' },
-	powerConstraints: { en: 'Power constraints', de: 'Leistungsbeschränkungen' },
-	externalInputs: { en: 'External inputs', de: 'Externe Eingänge' },
-	variableTariff: { en: 'Variable tariff', de: 'Variabler Tarif' },
-	wifi: { en: 'Wi-Fi', de: 'WLAN' },
-	eth: { en: 'Ethernet', de: 'LAN' },
-	update: { en: 'Update', de: 'Update' },
-	Source: { en: 'Source', de: 'Quelle' },
-	additionalHeater: { en: 'Additional heater', de: 'Zuheizer' },
-	additionalHeaterBlock: { en: 'Additional heater block', de: 'Zuheizer-Sperre' },
-	affectedDomain: { en: 'Affected domains', de: 'Betroffene Bereiche' },
-	appliancePowerBlock: { en: 'Power block', de: 'Leistungssperre' },
-	appliancePowerLimit: { en: 'Power limit', de: 'Leistungsbegrenzung' },
-	ch: { en: 'Heating', de: 'Heizen' },
-	compressor: { en: 'Compressor', de: 'Verdichter' },
-	cooling: { en: 'Cooling', de: 'Kühlen' },
-	coolingBlock: { en: 'Cooling block', de: 'Kühlsperre' },
-	dataProcessing: { en: 'Data processing', de: 'Datenverarbeitung' },
-	dhw: { en: 'Hot water', de: 'Warmwasser' },
-	dhwBlock: { en: 'Hot water block', de: 'Warmwassersperre' },
-	dhwReduceTempOnAlarm: { en: 'Hot water reduction on alarm', de: 'Warmwasser-Absenkung bei Alarm' },
-	eHeater: { en: 'Electric heater', de: 'Elektroheizstab' },
-	fallbackOperation: { en: 'Fallback operation', de: 'Notbetrieb' },
-	filter: { en: 'Filter', de: 'Filter' },
-	heating: { en: 'Heating', de: 'Heizen' },
-	heatingBlock: { en: 'Heating block', de: 'Heizsperre' },
-	highSourceTempStopCooling: { en: 'Cooling stop high source temperature', de: 'Kühlstopp hohe Quellentemperatur' },
-	highSourceTempStopHeating: { en: 'Heating stop high source temperature', de: 'Heizstopp hohe Quellentemperatur' },
-	hybrid: { en: 'Hybrid', de: 'Hybrid' },
-	ip: { en: 'IP address', de: 'IP-Adresse' },
-	lowSourceTempStopCooling: { en: 'Cooling stop low source temperature', de: 'Kühlstopp niedrige Quellentemperatur' },
-	lowSourceTempStopHeating: { en: 'Heating stop low source temperature', de: 'Heizstopp niedrige Quellentemperatur' },
-	maintenanceMode: { en: 'Maintenance mode', de: 'Wartungsmodus' },
-	openWindowDetection: { en: 'Open window detection', de: 'Fenster-offen-Erkennung' },
-	powerElecDesired: { en: 'Desired electrical power', de: 'Gewünschte elektrische Leistung' },
-	powerElecLimitation: { en: 'Electrical power limitation', de: 'Begrenzung elektrische Leistung' },
-	powerGuard: { en: 'Power guard', de: 'Leistungswächter' },
-	powerLimitation: { en: 'Power limitation', de: 'Leistungsbegrenzung' },
-	primary: { en: 'Primary circuit', de: 'Primärkreis' },
-	pv: { en: 'Photovoltaics', de: 'Photovoltaik' },
-	safetyBoard: { en: 'Safety board', de: 'Sicherheitsplatine' },
-	silentMode: { en: 'Silent mode', de: 'Flüsterbetrieb' },
-	smartFunction: { en: 'Smart function', de: 'Smart-Funktion' },
-	status: { en: 'Status', de: 'Status' },
-	summerBypass: { en: 'Summer bypass', de: 'Sommer-Bypass' },
-	total: { en: 'Total', de: 'Gesamt' },
-	tzInfo: { en: 'Time zone', de: 'Zeitzone' },
-	userAdditionalHeaterBlock: { en: 'User additional heater block', de: 'Zuheizer-Sperre durch Benutzer' },
-	workingTime: { en: 'Working time', de: 'Laufzeit' },
-	// Ordner der Signale
-	Stats: { en: 'Statistics', de: 'Statistik' },
-	Timer: { en: 'Timer', de: 'Timer' },
-	RelayStatus: { en: 'Relay status', de: 'Relaisstatus' },
-	HolidayNew: { en: 'Holiday programs', de: 'Urlaubsprogramme' },
-	InstallationDate: { en: 'Installation date', de: 'Installationsdatum' },
-	SeasonOpt: { en: 'Season optimization', de: 'Saisonoptimierung' },
-	LocSeasonOpt: { en: 'Local season optimization', de: 'Lokale Saisonoptimierung' },
-	FlowCtrl: { en: 'Flow control', de: 'Vorlaufregelung' },
-	IntDHW: { en: 'Internal hot water', de: 'Warmwasser intern' },
-	HMI: { en: 'Control unit', de: 'Bedieneinheit' },
-	EM: { en: 'Energy manager', de: 'Energiemanager' },
-	CH: { en: 'Heating', de: 'Heizen' },
-	DHW: { en: 'Hot water', de: 'Warmwasser' },
-	Cooling: { en: 'Cooling', de: 'Kühlen' },
-	Additional: { en: 'Additional heater', de: 'Zuheizer' },
-};
-
-/** Muster für nummerierte Ordner, z. B. hc1 = Heizkreis 1 */
-/** @type {[RegExp, string, string][]} */
+/** Muster für nummerierte Ordner, z. B. hc1 = Heizkreis 1. Der zweite Wert ist der Schlüssel in names.numberedFolders */
+/** @type {[RegExp, string][]} */
 const NUMBERED_FOLDERS = [
-	[/^hc(\d+)$/, 'Heating circuit', 'Heizkreis'],
-	[/^dhw(\d+)$/, 'Hot water circuit', 'Warmwasserkreis'],
-	[/^hs(\d+)$/, 'Heat source', 'Wärmeerzeuger'],
-	[/^device(\d+)$/, 'Device', 'Gerät'],
-	[/^zone(\d+)$/, 'Zone', 'Zone'],
-	[/^sc(\d+)$/, 'Solar circuit', 'Solarkreis'],
-	[/^input(\d+)$/, 'Input', 'Eingang'],
-	[/^HP(\d+)$/, 'Heat pump', 'Wärmepumpe'],
-	[/^HC(\d+)$/, 'Heating circuit', 'Heizkreis'],
-	[/^DHW(\d+)$/, 'Hot water circuit', 'Warmwasserkreis'],
+	[/^hc(\d+)$/, 'hc'],
+	[/^dhw(\d+)$/, 'dhw'],
+	[/^hs(\d+)$/, 'hs'],
+	[/^device(\d+)$/, 'device'],
+	[/^zone(\d+)$/, 'zone'],
+	[/^sc(\d+)$/, 'sc'],
+	[/^input(\d+)$/, 'input'],
+	[/^HP(\d+)$/, 'HP'],
+	[/^HC(\d+)$/, 'hc'],
+	[/^DHW(\d+)$/, 'dhw'],
 ];
 
 /**
- * Lesbarer Name für einen Ordner im Objektbaum.
+ * Setzt in einem übersetzten Namen die Nummer für den Platzhalter {n} ein, in allen Sprachen.
+ *
+ * @param {ioBroker.Translated} translated - Name mit {n}
+ * @param {string} number - Nummer, z. B. "2"
+ * @returns {ioBroker.Translated} Name mit eingesetzter Nummer
+ */
+function fillNumber(translated, number) {
+	/** @type {Record<string, string>} */
+	const result = {};
+	for (const [lang, text] of Object.entries(translated)) {
+		result[lang] = text.split('{n}').join(number);
+	}
+	return /** @type {ioBroker.Translated} */ (result);
+}
+
+/**
+ * Lesbarer Name für einen Ordner im Objektbaum (die Texte stehen in lib/names.json).
  *
  * @param {string} segment - Teil der Datenpunkt-ID, z. B. heatingCircuits oder hc1
  * @returns {ioBroker.StringOrTranslated} Name
  */
 function folderName(segment) {
-	if (FOLDER_NAMES[segment]) {
-		return FOLDER_NAMES[segment];
+	if (names.folders[segment]) {
+		return names.folders[segment];
 	}
-	for (const [pattern, en, de] of NUMBERED_FOLDERS) {
+	for (const [pattern, key] of NUMBERED_FOLDERS) {
 		const match = pattern.exec(segment);
 		if (match) {
-			return { en: `${en} ${match[1]}`, de: `${de} ${match[1]}` };
+			return fillNumber(names.numberedFolders[key], match[1]);
 		}
 	}
 	return segment;
@@ -216,12 +146,7 @@ function nameFor(apiPath) {
 	if (!template) {
 		return apiPath;
 	}
-	/** @type {Record<string, string>} */
-	const result = {};
-	for (const [lang, text] of Object.entries(template)) {
-		result[lang] = text.split('{n}').join(match[3]);
-	}
-	return /** @type {ioBroker.Translated} */ (result);
+	return fillNumber(template, match[3]);
 }
 
 /**
@@ -232,9 +157,16 @@ function nameFor(apiPath) {
  * @returns {ioBroker.StringOrTranslated} zusammengesetzter Name
  */
 function withPart(base, part) {
-	const b = typeof base === 'string' ? { en: base, de: base } : base;
-	const p = typeof part === 'string' ? { en: part, de: part } : part;
-	return { en: `${b.en} – ${p.en}`, de: `${b.de ?? b.en} – ${p.de ?? p.en}` };
+	/** @type {Record<string, string>} */
+	const b = typeof base === 'string' ? { en: base } : { ...base };
+	/** @type {Record<string, string>} */
+	const p = typeof part === 'string' ? { en: part } : { ...part };
+	/** @type {Record<string, string>} */
+	const result = {};
+	for (const lang of new Set([...Object.keys(b), ...Object.keys(p)])) {
+		result[lang] = `${b[lang] ?? b.en} – ${p[lang] ?? p.en}`;
+	}
+	return /** @type {ioBroker.Translated} */ (result);
 }
 
 /**
@@ -1074,13 +1006,13 @@ class BuderusMx400 extends utils.Adapter {
 	async onReady() {
 		await this.extendObjectAsync('info', {
 			type: 'channel',
-			common: { name: { en: 'Information', de: 'Informationen' } },
+			common: { name: names.info.channel },
 			native: {},
 		});
 		await this.extendObjectAsync('info.connection', {
 			type: 'state',
 			common: {
-				name: { en: 'Connection to the MX400', de: 'Verbindung zur MX400' },
+				name: names.info.connection,
 				type: 'boolean',
 				role: 'indicator.connected',
 				read: true,
@@ -1092,7 +1024,7 @@ class BuderusMx400 extends utils.Adapter {
 		await this.extendObjectAsync('info.discoveredPaths', {
 			type: 'state',
 			common: {
-				name: { en: 'Resources found on the MX400 (JSON)', de: 'Auf der MX400 gefundene Ressourcen (JSON)' },
+				name: names.info.discoveredPaths,
 				type: 'string',
 				role: 'json',
 				read: true,

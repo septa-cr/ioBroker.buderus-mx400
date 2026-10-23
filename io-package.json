@@ -160,7 +160,16 @@
             "common": {
                 "name": {
                     "en": "Information",
-                    "de": "Informationen"
+                    "de": "Informationen",
+                    "ru": "Информация",
+                    "pt": "Informações",
+                    "nl": "Informatie",
+                    "fr": "Informations",
+                    "it": "Informazioni",
+                    "es": "Información",
+                    "pl": "Informacje",
+                    "uk": "Інформація",
+                    "zh-cn": "信息"
                 }
             },
             "native": {}
@@ -172,7 +181,16 @@
                 "role": "indicator.connected",
                 "name": {
                     "en": "Connection to the MX400",
-                    "de": "Verbindung zur MX400"
+                    "de": "Verbindung zur MX400",
+                    "ru": "Подключение к MX400",
+                    "pt": "Conexão com o MX400",
+                    "nl": "Verbinding met de MX400",
+                    "fr": "Connexion au MX400",
+                    "it": "Connessione al MX400",
+                    "es": "Conexión con el MX400",
+                    "pl": "Połączenie z MX400",
+                    "uk": "Підключення до MX400",
+                    "zh-cn": "与MX400的连接"
                 },
                 "type": "boolean",
                 "read": true,
@@ -188,7 +206,16 @@
                 "role": "json",
                 "name": {
                     "en": "Resources found on the MX400 (JSON)",
-                    "de": "Auf der MX400 gefundene Ressourcen (JSON)"
+                    "de": "Auf der MX400 gefundene Ressourcen (JSON)",
+                    "ru": "Ресурсы, найденные на MX400 (JSON)",
+                    "pt": "Recursos encontrados no MX400 (JSON)",
+                    "nl": "Gevonden bronnen op de MX400 (JSON)",
+                    "fr": "Ressources trouvées sur le MX400 (JSON)",
+                    "it": "Risorse trovate sul MX400 (JSON)",
+                    "es": "Recursos encontrados en el MX400 (JSON)",
+                    "pl": "Zasoby znalezione w MX400 (JSON)",
+                    "uk": "Ресурси, знайдені на MX400 (JSON)",
+                    "zh-cn": "在MX400上找到的资源（JSON）"
                 },
                 "type": "string",
                 "read": true,
