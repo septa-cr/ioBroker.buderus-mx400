@@ -136,7 +136,7 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.0.6 (2026-10-23)
 
 - (septa-cr) Data point names are now available in all recommended languages (Russian, Portuguese, Dutch, French, Italian, Spanish, Polish, Ukrainian, Chinese) in addition to German and English
 - (septa-cr) The file with the names is more compact: numbered names (heating circuit 1 to 4 etc.) are generated from templates
