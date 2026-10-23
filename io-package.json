@@ -139,10 +139,12 @@
         "messagebox": true
     },
     "protectedNative": [
-        "token"
+        "token",
+        "_pass"
     ],
     "encryptedNative": [
-        "token"
+        "token",
+        "_pass"
     ],
     "native": {
         "ip": "",
