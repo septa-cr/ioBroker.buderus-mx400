@@ -2,9 +2,16 @@
 
 const utils = require('@iobroker/adapter-core');
 const https = require('node:https');
+const crypto = require('node:crypto');
 const endpoints = require('./lib/endpoints.json');
 /** @type {{ paths: Record<string, ioBroker.Translated>, keys: Record<string, ioBroker.Translated>, suffixes: Record<string, ioBroker.Translated> }} */
 const names = require('./lib/names.json');
+
+/** Abstand, in dem die Suche nach den vorhandenen Pfaden komplett wiederholt wird (24 Stunden) */
+const RESCAN_INTERVAL_MS = 24 * 60 * 60 * 1000;
+
+/** Kennung der Pfadliste: ändert sich, wenn eine neue Version der Adapter-Datei endpoints.json andere Pfade enthält */
+const ENDPOINTS_SIGNATURE = crypto.createHash('sha1').update(endpoints.join('\n')).digest('hex').slice(0, 12);
 
 /** Abstand, in dem Verlaufsdaten und andere selten ändernde Werte abgefragt werden (1 Stunde) */
 const SLOW_INTERVAL_MS = 60 * 60 * 1000;
@@ -302,6 +309,7 @@ class BuderusMx400 extends utils.Adapter {
 			name: 'buderus-mx400',
 		});
 		this.on('ready', this.onReady.bind(this));
+		this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 
 		/** @type {Set<string>} */
@@ -327,6 +335,10 @@ class BuderusMx400 extends utils.Adapter {
 		/** @type {string[]} */
 		this.slowPaths = [];
 		this.lastSlowPoll = 0;
+		/** Zeitpunkt der letzten vollständigen Suche nach den vorhandenen Pfaden */
+		this.lastDiscovery = 0;
+		/** Wurde in den Einstellungen eine neue Suche angefordert? */
+		this.rescanRequested = false;
 		/** Wurde die Suche nach den festen Pfaden abgeschlossen? */
 		this.discovered = false;
 		/** @type {boolean | undefined} */
@@ -442,7 +454,8 @@ class BuderusMx400 extends utils.Adapter {
 			});
 			this.knownStates.add(id);
 		}
-		await this.setState(id, { val, ack: true });
+		// Nur schreiben, wenn sich der Wert geändert hat (weniger Last und weniger Ereignisse für Logging-Adapter)
+		await this.setStateChangedAsync(id, { val, ack: true });
 	}
 
 	/**
@@ -581,7 +594,7 @@ class BuderusMx400 extends utils.Adapter {
 		// Werte, die in der Antwort nicht mehr vorkommen (z. B. behobene Fehlermeldungen), leeren
 		for (const id of this.complexLeaves.get(base) ?? []) {
 			if (!current.has(id)) {
-				await this.setState(id, { val: null, ack: true });
+				await this.setStateChangedAsync(id, { val: null, ack: true });
 			}
 		}
 		this.complexLeaves.set(base, current);
@@ -744,7 +757,9 @@ class BuderusMx400 extends utils.Adapter {
 		this.slowPaths = slow;
 		this.retryPaths = failed;
 		this.lastSlowPoll = Date.now();
+		this.lastDiscovery = Date.now();
 		this.discovered = true;
+		await this.saveDiscovery();
 		this.log.info(
 			`Suche abgeschlossen: ${endpoints.length} Pfade geprüft, ${fast.length + slow.length} vorhanden ` +
 				`(davon ${slow.length} stündlich), ${notPresent} bei dieser Anlage nicht vorhanden, ` +
@@ -780,6 +795,210 @@ class BuderusMx400 extends utils.Adapter {
 	}
 
 	/**
+	 * Speichert die gefundenen Pfade, damit der nächste Start sofort mit dieser Liste arbeiten kann.
+	 */
+	async saveDiscovery() {
+		const data = {
+			v: 1,
+			signature: ENDPOINTS_SIGNATURE,
+			ip: this.config.ip,
+			ts: this.lastDiscovery,
+			fixed: this.fixedPaths,
+			slow: this.slowPaths,
+			retry: this.retryPaths,
+		};
+		await this.setStateChangedAsync('info.discoveredPaths', { val: JSON.stringify(data), ack: true });
+	}
+
+	/**
+	 * Lädt die gespeicherte Liste der gefundenen Pfade.
+	 * Sie wird nur übernommen, wenn sie zur aktuellen Pfadliste und zur eingestellten IP-Adresse passt.
+	 *
+	 * @returns {Promise<boolean>} true, wenn eine gültige Liste geladen wurde
+	 */
+	async loadDiscovery() {
+		const state = await this.getStateAsync('info.discoveredPaths');
+		if (!state || typeof state.val !== 'string') {
+			return false;
+		}
+		try {
+			const data = JSON.parse(state.val);
+			const known = new Set(endpoints);
+			const isValid = (/** @type {unknown} */ list) =>
+				Array.isArray(list) && list.every(item => typeof item === 'string' && known.has(item));
+			if (
+				data.v !== 1 ||
+				data.signature !== ENDPOINTS_SIGNATURE ||
+				data.ip !== this.config.ip ||
+				!isValid(data.fixed) ||
+				!isValid(data.slow) ||
+				!isValid(data.retry) ||
+				data.fixed.length + data.slow.length === 0
+			) {
+				return false;
+			}
+			this.fixedPaths = data.fixed;
+			this.slowPaths = data.slow;
+			this.retryPaths = data.retry;
+			this.lastDiscovery = Number(data.ts) || 0;
+			this.discovered = true;
+			this.log.info(
+				`Gespeicherte Pfadliste geladen: ${data.fixed.length + data.slow.length} vorhanden ` +
+					`(davon ${data.slow.length} stündlich), die Suche wird nicht wiederholt`,
+			);
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Sendet Formulardaten per POST an die MX400 (z. B. zum Anfordern des API-Tokens).
+	 *
+	 * @param {string} host - IP-Adresse der MX400
+	 * @param {number} port - Port
+	 * @param {string} path - Pfad
+	 * @param {string} body - Formulardaten (application/x-www-form-urlencoded)
+	 * @returns {Promise<any>} Antwort als Objekt
+	 */
+	postForm(host, port, path, body) {
+		return new Promise((resolve, reject) => {
+			const req = https.request(
+				{
+					host,
+					port,
+					path,
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+						'Content-Length': Buffer.byteLength(body),
+					},
+					rejectUnauthorized: false, // Das Gerät nutzt ein selbst signiertes Zertifikat
+					timeout: 15000,
+				},
+				res => {
+					let text = '';
+					res.on('data', chunk => (text += chunk));
+					res.on('end', () => {
+						if (res.statusCode !== 200) {
+							let reason = '';
+							try {
+								const body = JSON.parse(text);
+								reason = typeof body.error === 'string' ? ` (${body.error})` : '';
+							} catch {
+								// keine auswertbare Antwort
+							}
+							const error = /** @type {Error & { statusCode?: number }} */ (
+								new Error(`HTTP ${res.statusCode}${reason}`)
+							);
+							error.statusCode = res.statusCode;
+							reject(error);
+							return;
+						}
+						try {
+							resolve(JSON.parse(text));
+						} catch {
+							reject(new Error('Ungültige Antwort'));
+						}
+					});
+				},
+			);
+			req.on('timeout', () => req.destroy(new Error('Zeitüberschreitung')));
+			req.on('error', reject);
+			req.write(body);
+			req.end();
+		});
+	}
+
+	/**
+	 * Fordert bei der MX400 einen API-Token an (Login und Pass vom Aufkleber des Geräts).
+	 * Login und Pass werden weder gespeichert noch protokolliert.
+	 *
+	 * @param {any} message - Daten aus den Einstellungen (ip, login, pass)
+	 * @returns {Promise<{ error?: string, result?: string, native?: { token: string } }>} Antwort an die Einstellungsseite
+	 */
+	async requestToken(message) {
+		const ip = typeof message?.ip === 'string' ? message.ip.trim() : '';
+		const login = typeof message?.login === 'string' ? message.login.trim() : '';
+		// Laut Hersteller müssen die Bindestriche aus dem Wert "Pass" entfernt werden
+		const pass = typeof message?.pass === 'string' ? message.pass.replace(/-/g, '').trim() : '';
+		if (!ip || !login || !pass) {
+			return { error: 'Please enter the IP address, Login and Pass.' };
+		}
+		if (!/^[A-Za-z0-9.-]+$/.test(ip)) {
+			return { error: 'The IP address is not valid.' };
+		}
+		try {
+			const body = new URLSearchParams({
+				grant_type: 'password',
+				username: login,
+				password: pass,
+				client_name: 'iobroker',
+			}).toString();
+			const data = await this.postForm(ip, 9442, '/auth/token', body);
+			if (typeof data?.access_token !== 'string' || !data.access_token) {
+				return { error: 'The MX400 did not return an API token.' };
+			}
+			this.log.info('API-Token von der MX400 erhalten');
+			return { result: 'API token received. Please save the settings.', native: { token: data.access_token } };
+		} catch (error) {
+			const statusCode = /** @type {{ statusCode?: number }} */ (error).statusCode;
+			this.log.warn(`Token-Anfrage fehlgeschlagen: ${error.message}`);
+			if (statusCode === 412) {
+				// physical_proximity_unproven: die Tasten am Gerät wurden nicht (rechtzeitig) gedrückt
+				return {
+					error:
+						'Please press the WLAN and Wireless buttons on the MX400 at the same time for one second ' +
+						'and request the token again within 5 minutes.',
+				};
+			}
+			if (statusCode === 400) {
+				// invalid_grant: Login oder Pass stimmen nicht
+				return {
+					error:
+						'The MX400 refused the login data. Check Login and Pass, ' +
+						'and press the WLAN and Wireless buttons on the MX400 first.',
+				};
+			}
+			if (statusCode === 507) {
+				// Token database full
+				return {
+					error:
+						'The MX400 cannot store another API token. ' +
+						"Revoke unused tokens first (see the manufacturer's guide).",
+				};
+			}
+			if (statusCode) {
+				return { error: 'The MX400 refused the request.' };
+			}
+			return { error: 'The MX400 could not be reached.' };
+		}
+	}
+
+	/**
+	 * Nachrichten von der Einstellungsseite (Schaltflächen).
+	 *
+	 * @param {ioBroker.Message} obj - Nachricht
+	 */
+	async onMessage(obj) {
+		if (!obj || typeof obj !== 'object' || typeof obj.command !== 'string') {
+			return;
+		}
+		let response;
+		if (obj.command === 'getToken') {
+			response = await this.requestToken(obj.message);
+		} else if (obj.command === 'rescan') {
+			this.rescanRequested = true;
+			response = { result: 'The search for resources will start with the next query cycle.' };
+		} else {
+			return;
+		}
+		if (obj.callback) {
+			this.sendTo(obj.from, obj.command, response, obj.callback);
+		}
+	}
+
+	/**
 	 * Ein Abfragedurchlauf: Signalliste holen, alle Werte lesen und den nächsten Durchlauf planen.
 	 */
 	async pollCycle() {
@@ -796,8 +1015,11 @@ class BuderusMx400 extends utils.Adapter {
 
 			let fixed = this.fixedPaths;
 			let slow = /** @type {string[]} */ ([]);
-			if (!this.discovered) {
-				// Beim ersten erfolgreichen Durchlauf werden die vorhandenen festen Pfade gesucht
+			const rescanDue =
+				this.discovered && (this.rescanRequested || Date.now() - this.lastDiscovery >= RESCAN_INTERVAL_MS);
+			if (!this.discovered || rescanDue) {
+				// Ohne gespeicherte Liste, einmal am Tag und auf Wunsch werden die vorhandenen Pfade gesucht
+				this.rescanRequested = false;
 				await this.discoverFixedPaths();
 				fixed = [];
 			} else if (Date.now() - this.lastSlowPoll >= SLOW_INTERVAL_MS) {
@@ -845,6 +1067,17 @@ class BuderusMx400 extends utils.Adapter {
 			},
 			native: {},
 		});
+		await this.extendObjectAsync('info.discoveredPaths', {
+			type: 'state',
+			common: {
+				name: { en: 'Resources found on the MX400 (JSON)', de: 'Auf der MX400 gefundene Ressourcen (JSON)' },
+				type: 'string',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
 		await this.setConnected(false);
 
 		if (!this.config.ip || !this.config.token) {
@@ -858,6 +1091,9 @@ class BuderusMx400 extends utils.Adapter {
 		} catch (error) {
 			this.log.error(`Verbindung zur MX400 fehlgeschlagen: ${error.message}`);
 		}
+
+		// Gespeicherte Pfadliste laden, damit die Suche nach den vorhandenen Pfaden nicht bei jedem Start läuft
+		await this.loadDiscovery();
 
 		// Startet die regelmäßige Abfrage. Schlägt ein Durchlauf fehl, wird es automatisch erneut versucht.
 		await this.pollCycle();

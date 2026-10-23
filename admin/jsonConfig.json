@@ -23,16 +23,6 @@
             "lg": 4,
             "xl": 4
         },
-        "token": {
-            "type": "password",
-            "label": "API token",
-            "newLine": true,
-            "xs": 12,
-            "sm": 12,
-            "md": 6,
-            "lg": 4,
-            "xl": 4
-        },
         "interval": {
             "type": "number",
             "label": "Polling interval (seconds)",
@@ -45,9 +35,53 @@
             "lg": 4,
             "xl": 4
         },
+        "token": {
+            "type": "password",
+            "label": "API token",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "_login": {
+            "type": "text",
+            "label": "Login of the MX400",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "_pass": {
+            "type": "password",
+            "label": "Pass of the MX400 (hyphens are removed automatically)",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "_getToken": {
+            "type": "sendTo",
+            "label": "Request API token",
+            "command": "getToken",
+            "variant": "contained",
+            "useNative": true,
+            "jsonData": "{\"ip\": \"${data.ip}\", \"login\": \"${data._login}\", \"pass\": \"${data._pass}\"}",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
         "_tokenHelpText": {
             "type": "staticText",
-            "text": "The API token is created once with the 'Login' and 'Pass' values from the sticker or information sheet of the MX400 (gateway firmware 15.00.01 or newer is required). To do this, press the WLAN and Wireless buttons on the MX400 at the same time for one second and request the token within 5 minutes. The token does not expire, so treat it like a password. The manufacturer's guide explains all steps:",
+            "text": "To create the API token, enter the 'Login' and 'Pass' values from the sticker or information sheet of the MX400 (gateway firmware 15.00.01 or newer is required). Then press the WLAN and Wireless buttons on the MX400 at the same time for one second and click 'Request API token' within 5 minutes. The token appears in the field above, then save the settings. Login and Pass are not stored. The token does not expire, so treat it like a password. The manufacturer's guide explains the steps:",
             "newLine": true,
             "xs": 12,
             "sm": 12,
@@ -63,6 +97,32 @@
             "button": true,
             "variant": "outlined",
             "icon": "book",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "_rescanDivider": {
+            "type": "divider",
+            "newLine": true
+        },
+        "_rescanText": {
+            "type": "staticText",
+            "text": "At the start, the adapter remembers which resources your MX400 provides. It searches again once a day, or when you click this button. The search takes about one to two minutes.",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
+        },
+        "_rescan": {
+            "type": "sendTo",
+            "label": "Search resources again",
+            "command": "rescan",
+            "variant": "outlined",
             "newLine": true,
             "xs": 12,
             "sm": 12,

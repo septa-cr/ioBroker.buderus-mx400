@@ -31,7 +31,8 @@ Manufacturer: [Buderus](https://www.buderus.de) · [Product information on the M
 - **Complex responses** such as error messages or system information are split into individual data points, and the complete response is also available as JSON.
 - **Sensor special values** (short circuit, open circuit, flow too low …) are not shown as measured values, the data point stays empty instead.
 - **Connection indicator** (`info.connection`) in the instance list
-- **Gentle on the device:** values that rarely change (history data, Wi-Fi list) are only read once per hour. Resources that did not answer during startup are retried hourly.
+- **Gentle on the device:** values that rarely change (history data, Wi-Fi list) are only read once per hour. Resources that did not answer during startup are retried hourly. The list of resources found on your MX400 is stored, so the adapter is ready immediately after a restart. It is refreshed once a day or when you click a button in the settings.
+- **Only real changes are written:** a value is only written to its data point when it has changed, which keeps the load low for logging adapters such as History or InfluxDB.
 
 <img src="docs/img/display.jpg" alt="System overview on the display of the heat pump" width="500">
 
@@ -42,12 +43,24 @@ Manufacturer: [Buderus](https://www.buderus.de) · [Product information on the M
 - Buderus heat pump with the **LAN and radio module MX400** (or another supported K 40 RF gateway) with **gateway firmware 15.00.01 or newer**
 - The MX400 and ioBroker must be in the same local network.
 - An **API token** for the MX400 (see below)
-- ioBroker with js-controller 6.0.11 or newer and Admin 7.0.23 or newer
+- ioBroker with js-controller 6.0.11 or newer and Admin 7.6.20 or newer
 - Node.js 22 or newer
 
 ## Creating the API token
 
 The token is created **once** with the `Login` and `Pass` values from the sticker or information sheet of the MX400. The token does not expire, so store it safely and treat it like a password.
+
+### Option 1: directly in the adapter settings (recommended)
+
+1. Enter the **IP address** of the MX400 in the settings.
+2. Enter **Login** and **Pass** (hyphens are removed automatically). These two values are not stored.
+3. Press the **WLAN** and **Wireless** buttons on the MX400 at the same time for one second. The LEDs briefly flash blue.
+4. **Within 5 minutes**, click **Request API token** in the settings. The token appears in the field *API token*.
+5. Click **Save**.
+
+Request the token only once and keep it: every request creates a new token on the MX400, and its memory for tokens is limited (error `507 Token database full`, unused tokens can be revoked as described in the manufacturer's guide).
+
+### Option 2: manually with curl
 
 Short summary of the manufacturer's guide:
 
@@ -67,7 +80,7 @@ Short summary of the manufacturer's guide:
 
     On Windows (PowerShell), write `curl.exe` instead of `curl` and put the command on a single line without the `\`.
 
-5. Copy the value of `access_token` from the response.
+5. Copy the value of `access_token` from the response and enter it in the field *API token*.
 
 The complete guide with troubleshooting: [K 40 RF API documentation (Bosch Home Comfort)](https://github.com/bosch-home-comfort/api-docs/blob/main/docs/k-40-rf.md)
 
@@ -81,6 +94,7 @@ Install the adapter via the adapter list of the ioBroker Admin: open **Adapters*
 | --- | --- |
 | IP address of the MX400 | IP address of the MX400 in your network, e.g. `192.168.178.135` |
 | API token | The token created as described above. It is stored encrypted. |
+| Login / Pass | Only needed once to request the token. They are not stored. |
 | Polling interval (seconds) | How often the values are read. Default 60, minimum 10 |
 
 At the first start, the adapter checks all resources of the API. This takes about one to two minutes. The log then shows how many resources your system provides, for example: *"Search completed: 1286 paths checked, 118 present …"*.
@@ -90,6 +104,7 @@ At the first start, the adapter checks all resources of the API. This takes abou
 | Folder | Content |
 | --- | --- |
 | `info.connection` | Connection to the MX400 (true/false) |
+| `info.discoveredPaths` | Internal list of the resources found on your MX400 (JSON) |
 | `signals.*` | All signals reported by the device, e.g. outdoor temperature, flow temperature, compressor speed |
 | `heatSources.*` | Heat pump: temperatures, compressor power, system pressure, energy counters |
 | `heatingCircuits.hc1.*` | Heating circuit 1: room temperature, setpoints, pump and status |
@@ -121,6 +136,14 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+- (septa-cr) New: the API token can be requested directly in the adapter settings (Login and Pass of the MX400, button "Request API token"), curl is no longer needed
+- (septa-cr) New: the list of resources found on the MX400 is stored and reused at the next start, it is refreshed once a day or via a button in the settings
+- (septa-cr) Values are only written when they change (`setStateChanged`)
+- (septa-cr) Documentation: required Admin version corrected (7.6.20)
+
 ### 0.0.4 (2026-10-22)
 
 - (septa-cr) Adjusted to the requirements of the ioBroker repository: minimum Node.js 22, tests with Node.js 22, 24 and 26, automated releases via trusted publishing, updated contact address and installation notes

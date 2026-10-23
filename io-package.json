@@ -122,7 +122,8 @@
             {
                 "admin": ">=7.6.20"
             }
-        ]
+        ],
+        "messagebox": true
     },
     "protectedNative": [
         "token"
@@ -161,6 +162,21 @@
                 "read": true,
                 "write": false,
                 "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.discoveredPaths",
+            "type": "state",
+            "common": {
+                "role": "json",
+                "name": {
+                    "en": "Resources found on the MX400 (JSON)",
+                    "de": "Auf der MX400 gefundene Ressourcen (JSON)"
+                },
+                "type": "string",
+                "read": true,
+                "write": false
             },
             "native": {}
         }

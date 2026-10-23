@@ -27,7 +27,8 @@ Hersteller: [Buderus](https://www.buderus.de) · [Produktinformation zum MX400 (
 - **Zusammengesetzte Antworten** wie Fehlermeldungen oder Systeminformationen werden in einzelne Datenpunkte zerlegt. Die vollständige Antwort steht zusätzlich als JSON bereit.
 - **Sonderwerte von Fühlern** (Kurzschluss, Leitungsbruch, zu geringer Durchfluss …) werden nicht als Messwert angezeigt, der Datenpunkt bleibt stattdessen leer.
 - **Verbindungsanzeige** (`info.connection`) in der Instanzenliste
-- **Schonend für das Gerät:** Selten veränderliche Werte (Verlaufsdaten, WLAN-Liste) werden nur einmal pro Stunde abgefragt. Ressourcen, die beim Start nicht geantwortet haben, werden stündlich erneut versucht.
+- **Schonend für das Gerät:** Selten veränderliche Werte (Verlaufsdaten, WLAN-Liste) werden nur einmal pro Stunde abgefragt. Ressourcen, die beim Start nicht geantwortet haben, werden stündlich erneut versucht. Die Liste der auf deiner MX400 gefundenen Ressourcen wird gespeichert, der Adapter ist nach einem Neustart also sofort bereit. Sie wird einmal am Tag oder per Schaltfläche in den Einstellungen aktualisiert.
+- **Nur echte Änderungen werden geschrieben:** Ein Wert wird nur dann in den Datenpunkt geschrieben, wenn er sich geändert hat. Das schont Logging-Adapter wie History oder InfluxDB.
 
 <img src="../img/display.jpg" alt="Systemübersicht auf dem Display der Wärmepumpe" width="500">
 
@@ -38,12 +39,24 @@ Hersteller: [Buderus](https://www.buderus.de) · [Produktinformation zum MX400 (
 - Buderus-Wärmepumpe mit dem **LAN- und Funkmodul MX400** (oder einem anderen unterstützten K-40-RF-Gateway) mit **Gateway-Firmware 15.00.01 oder neuer**
 - MX400 und ioBroker im selben lokalen Netzwerk
 - Ein **API-Token** für das MX400 (siehe unten)
-- ioBroker mit js-controller 6.0.11 oder neuer und Admin 7.0.23 oder neuer
+- ioBroker mit js-controller 6.0.11 oder neuer und Admin 7.6.20 oder neuer
 - Node.js 22 oder neuer
 
 ## API-Token erzeugen
 
 Der Token wird **einmalig** mit den Werten `Login` und `Pass` vom Aufkleber bzw. Info-Blatt des MX400 erzeugt. Er läuft nicht ab. Bewahre ihn sicher auf und behandle ihn wie ein Passwort.
+
+### Möglichkeit 1: direkt in den Einstellungen des Adapters (empfohlen)
+
+1. Trage in den Einstellungen die **IP-Adresse** des MX400 ein.
+2. Gib **Login** und **Pass** ein (Bindestriche werden automatisch entfernt). Diese beiden Werte werden nicht gespeichert.
+3. Drücke die Tasten **WLAN** und **Wireless** am MX400 eine Sekunde lang gleichzeitig. Die LEDs blinken kurz blau.
+4. Klicke **innerhalb von 5 Minuten** in den Einstellungen auf **API-Token anfordern**. Der Token erscheint im Feld *API-Token*.
+5. Klicke auf **Speichern**.
+
+Fordere den Token nur einmal an und behalte ihn: Jede Anfrage erzeugt einen neuen Token auf dem MX400, und dessen Speicher für Token ist begrenzt (Fehler `507 Token database full`, nicht benötigte Token lassen sich wie in der Anleitung des Herstellers beschrieben widerrufen).
+
+### Möglichkeit 2: von Hand mit curl
 
 Kurzfassung der Herstelleranleitung:
 
@@ -63,7 +76,7 @@ Kurzfassung der Herstelleranleitung:
 
     Unter Windows (PowerShell) schreibst du `curl.exe` statt `curl` und gibst den Befehl in einer Zeile ohne die `\` ein.
 
-5. Kopiere den Wert von `access_token` aus der Antwort.
+5. Kopiere den Wert von `access_token` aus der Antwort und trage ihn im Feld *API-Token* ein.
 
 Die vollständige Anleitung mit Fehlerbehebung: [K 40 RF API-Dokumentation (Bosch Home Comfort)](https://github.com/bosch-home-comfort/api-docs/blob/main/docs/k-40-rf.md)
 
@@ -77,6 +90,7 @@ Installiere den Adapter über die Adapterliste im ioBroker-Admin: Öffne den Ber
 | --- | --- |
 | IP-Adresse des MX400 | IP-Adresse des MX400 in deinem Netzwerk, z. B. `192.168.178.135` |
 | API-Token | Der wie oben beschrieben erzeugte Token. Er wird verschlüsselt gespeichert. |
+| Login / Pass | Nur einmal zum Anfordern des Tokens nötig. Sie werden nicht gespeichert. |
 | Abfrageintervall (Sekunden) | Wie oft die Werte gelesen werden. Standard 60, mindestens 10 |
 
 Beim ersten Start prüft der Adapter alle Ressourcen der API. Das dauert etwa ein bis zwei Minuten. Danach steht im Log, wie viele Ressourcen deine Anlage liefert, zum Beispiel: *"Suche abgeschlossen: 1286 Pfade geprüft, 118 vorhanden …"*.
@@ -86,6 +100,7 @@ Beim ersten Start prüft der Adapter alle Ressourcen der API. Das dauert etwa ei
 | Ordner | Inhalt |
 | --- | --- |
 | `info.connection` | Verbindung zum MX400 (true/false) |
+| `info.discoveredPaths` | Interne Liste der auf deiner MX400 gefundenen Ressourcen (JSON) |
 | `signals.*` | Alle vom Gerät gemeldeten Signale, z. B. Außentemperatur, Vorlauftemperatur, Verdichterdrehzahl |
 | `heatSources.*` | Wärmepumpe: Temperaturen, Verdichterleistung, Anlagendruck, Energiezähler |
 | `heatingCircuits.hc1.*` | Heizkreis 1: Raumtemperatur, Sollwerte, Pumpe und Status |
