@@ -136,8 +136,7 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.0.5 (2026-10-23)
 
 - (septa-cr) New: the API token can be requested directly in the adapter settings (Login and Pass of the MX400, button "Request API token"), curl is no longer needed
 - (septa-cr) New: the list of resources found on the MX400 is stored and reused at the next start, it is refreshed once a day or via a button in the settings

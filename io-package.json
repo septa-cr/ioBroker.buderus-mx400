@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "buderus-mx400",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "news": {
+            "0.0.5": {
+                "en": "New: request the API token directly in the adapter settings; the list of found resources is stored and reused at the next start; values are only written when they change; documentation corrected (Admin 7.6.20)",
+                "de": "Neu: API-Token direkt in den Einstellungen anfordern; die Liste der gefundenen Ressourcen wird gespeichert und beim nächsten Start wiederverwendet; Werte werden nur noch bei Änderung geschrieben; Dokumentation korrigiert (Admin 7.6.20)",
+                "ru": "Новое: API-токен можно запросить прямо в настройках адаптера; список найденных ресурсов сохраняется и используется при следующем запуске; значения записываются только при изменении; исправлена документация (Admin 7.6.20)",
+                "pt": "Novo: pedir o token da API diretamente nas definições do adaptador; a lista de recursos encontrados é guardada e reutilizada no próximo arranque; os valores só são escritos quando mudam; documentação corrigida (Admin 7.6.20)",
+                "nl": "Nieuw: het API-token rechtstreeks in de instellingen van de adapter aanvragen; de lijst met gevonden bronnen wordt opgeslagen en bij de volgende start hergebruikt; waarden worden alleen geschreven als ze veranderen; documentatie gecorrigeerd (Admin 7.6.20)",
+                "fr": "Nouveau : demander le jeton API directement dans les paramètres de l'adaptateur ; la liste des ressources trouvées est enregistrée et réutilisée au prochain démarrage ; les valeurs ne sont écrites que lorsqu'elles changent ; documentation corrigée (Admin 7.6.20)",
+                "it": "Novità: richiedere il token API direttamente nelle impostazioni dell'adattatore; l'elenco delle risorse trovate viene salvato e riutilizzato al prossimo avvio; i valori vengono scritti solo quando cambiano; documentazione corretta (Admin 7.6.20)",
+                "es": "Novedad: solicitar el token de API directamente en los ajustes del adaptador; la lista de recursos encontrados se guarda y se reutiliza en el siguiente inicio; los valores solo se escriben cuando cambian; documentación corregida (Admin 7.6.20)",
+                "pl": "Nowość: token API można zażądać bezpośrednio w ustawieniach adaptera; lista znalezionych zasobów jest zapisywana i używana przy następnym starcie; wartości są zapisywane tylko po zmianie; poprawiono dokumentację (Admin 7.6.20)",
+                "uk": "Нове: API-токен можна запросити безпосередньо в налаштуваннях адаптера; список знайдених ресурсів зберігається та використовується під час наступного запуску; значення записуються лише за зміни; виправлено документацію (Admin 7.6.20)",
+                "zh-cn": "新增：可直接在适配器设置中申请 API 令牌；找到的资源列表会被保存并在下次启动时重复使用；仅在数值发生变化时才写入；更正了文档（Admin 7.6.20）"
+            },
             "0.0.4": {
                 "en": "Adjusted to the requirements of the ioBroker repository: minimum Node.js 22, tests with Node.js 22, 24 and 26, automated releases via trusted publishing, updated contact address and installation notes",
                 "de": "An die Anforderungen des ioBroker-Repositorys angepasst: mindestens Node.js 22, Tests mit Node.js 22, 24 und 26, automatische Releases über Trusted Publishing, neue Kontaktadresse und Installationshinweise",

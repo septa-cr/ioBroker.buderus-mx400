@@ -1,6 +1,6 @@
 {
   "name": "iobroker.buderus-mx400",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Reads all data of a Buderus heat pump via the local API of the MX400 LAN and radio module",
   "author": {
     "name": "septa-cr",
