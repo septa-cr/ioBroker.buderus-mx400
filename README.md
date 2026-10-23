@@ -25,7 +25,7 @@ Manufacturer: [Buderus](https://www.buderus.de) · [Product information on the M
 ## Features
 
 - **Reads all available values automatically.** At startup, the adapter checks every resource described in the manufacturer's API specification and creates data points only for those your system actually provides. In addition, all signals reported by the device itself are read.
-- **German and English names** for all data points, with the correct units (°C, kWh, %, l/h …) and matching roles
+- **Names in 11 languages** for all data points (English, German, Russian, Portuguese, Dutch, French, Italian, Spanish, Polish, Ukrainian, Chinese), with the correct units (°C, kWh, %, l/h …) and matching roles
 - **Energy counters** (e.g. total consumption, heating, hot water) as separate data points for heat produced, compressor and electric heater
 - **History data** for consumption, starts, working time and temperatures: daily values of the last 31 days, monthly values of the last 12 months, plus *today* and *this month*. Temperatures are shown as averages, energy values as totals.
 - **Complex responses** such as error messages or system information are split into individual data points, and the complete response is also available as JSON.
@@ -136,6 +136,12 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+- (septa-cr) Data point names are now available in all recommended languages (Russian, Portuguese, Dutch, French, Italian, Spanish, Polish, Ukrainian, Chinese) in addition to German and English
+- (septa-cr) The file with the names is more compact: numbered names (heating circuit 1 to 4 etc.) are generated from templates
+- (septa-cr) The field `_pass` is now declared as protected and encrypted in `io-package.json`
+
 ### 0.0.5 (2026-10-23)
 
 - (septa-cr) New: the API token can be requested directly in the adapter settings (Login and Pass of the MX400, button "Request API token"), curl is no longer needed
