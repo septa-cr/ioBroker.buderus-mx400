@@ -4,7 +4,7 @@ const utils = require('@iobroker/adapter-core');
 const https = require('node:https');
 const crypto = require('node:crypto');
 const endpoints = require('./lib/endpoints.json');
-/** @type {{ paths: Record<string, ioBroker.Translated>, keys: Record<string, ioBroker.Translated>, suffixes: Record<string, ioBroker.Translated> }} */
+/** @type {{ paths: Record<string, ioBroker.Translated>, templates: Record<string, ioBroker.Translated>, keys: Record<string, ioBroker.Translated>, suffixes: Record<string, ioBroker.Translated> }} */
 const names = require('./lib/names.json');
 
 /** Abstand, in dem die Suche nach den vorhandenen Pfaden komplett wiederholt wird (24 Stunden) */
@@ -192,14 +192,36 @@ function folderName(segment) {
 	return segment;
 }
 
+/** Nummerierter Teil eines API-Pfads, z. B. hc2 in /heatingCircuits/hc2/pumpStatus oder HP1 in SRC.CUHP.HP1.Power */
+const NUMBER_IN_PATH = /(^|[/.])(hc|dhw|hs|device|zone|sc|input|HP|HC|DHW)(\d+)(?=[/.]|$)/;
+
 /**
- * Name eines Datenpunkts aus der Übersetzungsdatei (deutsch und englisch), sonst der API-Pfad.
+ * Name eines Datenpunkts aus der Übersetzungsdatei, sonst der API-Pfad.
+ * Zuerst wird nach einem festen Eintrag gesucht, danach nach einer Vorlage mit {n} als Platzhalter für die Nummer
+ * (aus /heatingCircuits/hc2/pumpStatus wird /heatingCircuits/hc{n}/pumpStatus mit der Nummer 2).
  *
  * @param {string} apiPath - API-Pfad
  * @returns {ioBroker.StringOrTranslated} Name
  */
 function nameFor(apiPath) {
-	return names.paths[apiPath] ?? apiPath;
+	const exact = names.paths[apiPath];
+	if (exact) {
+		return exact;
+	}
+	const match = NUMBER_IN_PATH.exec(apiPath);
+	if (!match) {
+		return apiPath;
+	}
+	const template = names.templates[apiPath.replace(NUMBER_IN_PATH, '$1$2{n}')];
+	if (!template) {
+		return apiPath;
+	}
+	/** @type {Record<string, string>} */
+	const result = {};
+	for (const [lang, text] of Object.entries(template)) {
+		result[lang] = text.split('{n}').join(match[3]);
+	}
+	return /** @type {ioBroker.Translated} */ (result);
 }
 
 /**
