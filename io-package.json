@@ -149,6 +149,7 @@
     "native": {
         "ip": "",
         "token": "",
+        "_pass": "",
         "interval": 60
     },
     "objects": [],
