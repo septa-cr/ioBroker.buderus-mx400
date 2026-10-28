@@ -3,8 +3,9 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: monthly
-      time: "00:05"
+      # Once a month at a fixed, individual time (load distribution)
+      interval: cron
+      cronjob: "23 3 9 * *"
       timezone: Europe/Berlin
     open-pull-requests-limit: 15
     assignees:
@@ -21,8 +22,9 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: monthly
-      time: "00:05"
+      # Once a month at a fixed, individual time (load distribution)
+      interval: cron
+      cronjob: "47 4 12 * *"
       timezone: Europe/Berlin
     open-pull-requests-limit: 15
     assignees:

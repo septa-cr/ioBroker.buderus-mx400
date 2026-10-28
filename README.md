@@ -153,19 +153,7 @@ This adapter is a private project and is not affiliated with Bosch Thermotechnik
 
 - (septa-cr) Adjusted to the requirements of the ioBroker repository: minimum Node.js 22, tests with Node.js 22, 24 and 26, automated releases via trusted publishing, updated contact address and installation notes
 
-### 0.0.3 (2026-10-22)
-
-- (septa-cr) The settings page is now translated into all languages
-- (septa-cr) More precise state roles for energy counters (`value.power.consumption`)
-- (septa-cr) Minimum Node.js version documented (Node.js 22)
-
-### 0.0.2 (2026-10-22)
-
-- (septa-cr) Corrected the package description (LAN and radio module MX400)
-
-### 0.0.1 (2026-10-18)
-
-- (septa-cr) Initial release: reads all values of the Buderus MX400 LAN and radio module via the local API (signals, energy counters, history data), German and English data point names, connection indicator
+Older changelog entries can be found in [CHANGELOG_OLD.md](CHANGELOG_OLD.md).
 
 ## License
 
